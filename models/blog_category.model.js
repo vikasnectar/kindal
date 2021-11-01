@@ -5,11 +5,13 @@ module.exports = (sequelize, Sequelize) => {
       },
       description: {
         type: Sequelize.TEXT
-      },status: {
+      },
+      status: {
         type: Sequelize.BOOLEAN,
         default:false
       }
-    },{
+    },
+    {
         timestamps:true
     });
   

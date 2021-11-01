@@ -2,9 +2,11 @@ module.exports = (sequelize, Sequelize) => {
     const Blog_category = sequelize.define("blog_category", {
         title: {
         type: Sequelize.STRING
-      },  title_en: {
+      },
+      title_en: {
         type: Sequelize.STRING
-      },category_id :{
+      },
+      category_id :{
         type: sequelize.NUMBER(11)
       },
       url:{
@@ -24,10 +26,12 @@ module.exports = (sequelize, Sequelize) => {
       },
       description_en: {
         type: Sequelize.TEXT
-      },approved: {
+      },
+      approved: {
         type: Sequelize.BOOLEAN,
         default:false
-      },status: {
+      },
+      status: {
         type: Sequelize.BOOLEAN,
         default:false
       }

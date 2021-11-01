@@ -26,7 +26,8 @@ module.exports = (sequelize, Sequelize) => {
       },
       dob_date: {
         type: Sequelize.DATE(6)
-      },status: {
+      },
+      status: {
         type: Sequelize.BOOLEAN,
         default:false
       }
