@@ -19,6 +19,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.admin = require("./admin.model.js")(sequelize, Sequelize);
-db.admin = require("./blog_category.model.js")(sequelize, Sequelize);
+db.blog_category = require("./blog_category.model.js")(sequelize, Sequelize);
+db.blog = require("./blog.model.js")(sequelize, Sequelize);
 
 module.exports = db;

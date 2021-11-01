@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Blog_category = sequelize.define("blog_category", {
+    const blog = sequelize.define("blog", {
         title: {
         type: Sequelize.STRING
       },
@@ -7,19 +7,19 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       category_id :{
-        type: sequelize.NUMBER(11)
+        type: Sequelize.INTEGER(11)
       },
       url:{
-        type:sequelize.STRING
+        type:Sequelize.STRING
       },
       date:{
-          type:sequelize.DATE(6)
+          type:Sequelize.DATE(6)
       },
       time:{
-          type:sequelize.STRING
+          type:Sequelize.STRING
       },
       image:{
-          type:sequelize.STRING
+          type:Sequelize.STRING
       },
       description: {
         type: Sequelize.TEXT
@@ -39,5 +39,5 @@ module.exports = (sequelize, Sequelize) => {
         timestamps:true
     });
   
-    return Blog_category;
+    return blog;
   };
