@@ -1,8 +1,8 @@
 var express = require('express')
 var router = express.Router()
-var admin = require('../controllers/admin_ctrl') 
+var event = require('../controllers/event_ctrl') 
 // define the home page route
-router.get('/', admin.test);
+router.get('/', event.test);
 
 
 module.exports = router
