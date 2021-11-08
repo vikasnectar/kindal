@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Blog_category = sequelize.define("blog_category", {
+  const Event_category = sequelize.define("event_category", {
     name: {
       type: Sequelize.STRING
     },
@@ -22,5 +22,5 @@ module.exports = (sequelize, Sequelize) => {
       timestamps: true
     });
 
-  return Blog_category;
+  return Event_category;
 };

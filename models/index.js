@@ -1,11 +1,11 @@
 const dbConfig = require("../config/db.config");
 
-const {Sequelize} = require("sequelize");
+const { Sequelize } = require("sequelize");
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   operatorsAliases: false,
-  logging:true,
+  logging: true,
   pool: {
     max: dbConfig.pool.max,
     min: dbConfig.pool.min,
@@ -19,9 +19,12 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.admin = require("./user.model.js")(sequelize, Sequelize);
-db.blog_category = require("./blog_category.model.js")(sequelize, Sequelize);
 db.blog = require("./blog.model.js")(sequelize, Sequelize);
+db.blog_category = require("./blog_category.model.js")(sequelize, Sequelize);
+db.blog_comment = require("./blog.comment.model.js")(sequelize, Sequelize);
 db.event = require("./event.model.js")(sequelize, Sequelize);
+db.event_category = require("./event_category.model.js")(sequelize, Sequelize);
+
 
 db.admin.hasMany(db.blog)
 db.blog.belongsTo(db.admin)
@@ -29,12 +32,25 @@ db.blog.belongsTo(db.admin)
 db.admin.hasMany(db.event)
 db.event.belongsTo(db.admin)
 
-db.blog_category.hasMany(db.blog,{
+db.event_category.hasMany(db.event, {
   foreignKey: "category_id"
 })
-db.blog.belongsTo(db.blog_category,{
+db.event.belongsTo(db.event_category, {
   foreignKey: "category_id"
 })
 
+db.blog_category.hasMany(db.blog, {
+  foreignKey: "category_id"
+})
+db.blog.belongsTo(db.blog_category, {
+  foreignKey: "category_id"
+})
+
+db.blog.hasMany(db.blog_comment, {
+  foreignKey: "blog_id"
+})
+db.blog_comment.belongsTo(db.blog, {
+  foreignKey: "blog_id"
+})
 
 module.exports = db;
