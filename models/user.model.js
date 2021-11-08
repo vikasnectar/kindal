@@ -27,6 +27,12 @@ module.exports = (sequelize, Sequelize) => {
       dob_date: {
         type: Sequelize.DATE(6)
       },
+      verification_token: {
+        type: Sequelize.STRING
+      },
+      resetPasswordExpires: {
+        type: Sequelize.STRING
+      },
       status: {
         type: Sequelize.BOOLEAN,
         default:false

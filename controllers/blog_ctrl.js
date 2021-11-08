@@ -1,13 +1,450 @@
 'use strict'
 var jwt = require('jsonwebtoken');
 const config =  require('../config');
-let blog ={};
+const utility = require('../helpers/utility');
+const db = require("../models");
+const Constant = require('../config/constant');
+const blog = db.blog;
+const blog_category = db.blog_category;
+const { Op } = require("sequelize");
+let blogs ={};
 
-blog.test = function (req, res) {
-    res.send('blog testing')
+blogs.add = async (req, res)=>{
+    try {
+        
+        let {title,title_en,category_id,url,date,time,description,description_en} = req.body;
+        let {userId} = req.user;
+
+
+        let  fileName='';
+        if(req.files){
+            fileName = await utility.fileupload(req.files)
+        }
+    let blogData = {
+        title:title,
+        title_en:title_en,
+        category_id:category_id,
+        userId:userId,
+        url:url,
+        date:date,
+        time:time,
+        image:fileName,
+        description:description,
+        description_en:description_en
+    }
+
+    let result = await blog.create(blogData);
+    if(result){
+        let data = await blog.findAll({})
+
+        return res.json({
+            code:Constant.SUCCESS_CODE,
+            massage:Constant.BLOG_SAVE_SUCCESS,
+            data:data
+        })
+    }else{
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:result
+        })
+    }
+    } catch (error) {
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    }
+
 }
 
 
+blogs.edit = async (req, res)=>{
+    try {
+        
+        let {id,title,title_en,category_id,url,date,time,description,description_en} = req.body;
+        let {userId} = req.user;
+
+        let blogData = {
+            title:title,
+            title_en:title_en,
+            category_id:category_id,
+            userId:userId,
+            url:url,
+            date:date,
+            time:time,
+            description:description,
+            description_en:description_en
+        }
+
+        if(req.files){
+            blogData.image = await utility.fileupload(req.files)
+        }
+   
+    
+        blog.findOne({
+            where: {
+                id: id
+              }
+          }).then(async (result)=>{
+              if(result){
+                    result.update(blogData)
+
+                    return res.json({
+                    code:Constant.SUCCESS_CODE,
+                    massage:Constant.BLOG_UPDATED_SUCCESS,
+                    data:result
+                })
+
+                }else{
+                    return res.json({
+                        code:Constant.ERROR_CODE,
+                        massage:Constant.SOMETHING_WENT_WRONG,
+                        data:result
+                    })
+                }
+
+          }).catch(error=>{
+            return res.json({
+                code:Constant.ERROR_CODE,
+                massage:Constant.SOMETHING_WENT_WRONG,
+                data:error
+            })
+          })
+    } catch (error) {
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    }
+
+}
 
 
-module.exports = blog;
+blogs.delete = async (req, res)=>{
+    try {
+        
+        let {id} = req.body;
+        let {userId} = req.user;
+
+        blog.findOne({
+            where: {
+                id: id,
+                status:1
+              }
+          }).then(async (result)=>{
+              if(result){
+                let blogData = {
+                    status:0
+            
+                }
+                result.update(blogData)
+
+                return res.json({
+                    code:Constant.SUCCESS_CODE,
+                    massage:Constant.BLOG_DELETED_SUCCESS,
+                    data:result
+                })
+
+              }else{
+                return res.json({
+                    code:Constant.ERROR_CODE,
+                    massage:Constant.SOMETHING_WENT_WRONG,
+                    data:result
+                })
+              }
+
+          }).catch(error=>{
+            return res.json({
+                code:Constant.ERROR_CODE,
+                massage:Constant.SOMETHING_WENT_WRONG,
+                data:error
+            })
+          })
+ 
+    } catch (error) {
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    }
+
+}
+
+
+blogs.addBlogCategory = async (req, res)=>{
+    try {
+        
+        let {name,name_en,description,description_en} = req.body;
+      
+    let blogData = {
+        name:name,
+        name_en:name_en,
+        description:description,
+        description_en:description_en
+    }
+
+    let result = await blog_category.create(blogData);
+    if(result){
+        let data = await blog_category.findAll({})
+
+        return res.json({
+            code:Constant.SUCCESS_CODE,
+            massage:Constant.BLOG_CATEGORY_SAVE_SUCCESS,
+            data:data
+        })
+    }else{
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:result
+        })
+    }
+    } catch (error) {
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    }
+
+}
+
+
+blogs.editBlogCategory = async (req, res)=>{
+    try {
+        
+        let {id,name,name_en,description,description_en} = req.body;
+
+        let blogData = {
+            name:name,
+            name_en:name_en,
+            description:description,
+            description_en:description_en
+        }
+
+        blog_category.findOne({
+            where: {
+                id: id
+              }
+          }).then(async (result)=>{
+              if(result){
+                    result.update(blogData)
+
+                    return res.json({
+                    code:Constant.SUCCESS_CODE,
+                    massage:Constant.BLOG_CATEGORY_UPDATED_SUCCESS,
+                    data:result
+                })
+
+                }else{
+                    return res.json({
+                        code:Constant.ERROR_CODE,
+                        massage:Constant.SOMETHING_WENT_WRONG,
+                        data:result
+                    })
+                }
+
+          }).catch(error=>{
+            return res.json({
+                code:Constant.ERROR_CODE,
+                massage:Constant.SOMETHING_WENT_WRONG,
+                data:error
+            })
+          })
+    } catch (error) {
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    }
+
+}
+
+
+blogs.deleteBlogCategory = async (req, res)=>{
+    try {
+        
+        let {id} = req.body;
+        blog_category.findOne({
+            where: {
+                id: id,
+                status:1
+              }
+          }).then(async (result)=>{
+              if(result){
+                let blogData = {
+                    status:0
+            
+                }
+                result.update(blogData)
+
+                return res.json({
+                    code:Constant.SUCCESS_CODE,
+                    massage:Constant.BLOG_CATEGORY_DELETED_SUCCESS,
+                    data:result
+                })
+
+              }else{
+                return res.json({
+                    code:Constant.ERROR_CODE,
+                    massage:Constant.SOMETHING_WENT_WRONG,
+                    data:result
+                })
+              }
+
+          }).catch(error=>{
+            return res.json({
+                code:Constant.ERROR_CODE,
+                massage:Constant.SOMETHING_WENT_WRONG,
+                data:error
+            })
+          })
+ 
+    } catch (error) {
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    }
+
+}
+
+blogs.getAllBlogs = async (req,res)=>{
+try {
+    blog.findAll({
+        where:{
+            status:1
+        }
+    }).then(result =>{
+        return res.json({
+            code:Constant.SUCCESS_CODE,
+            massage:Constant.BLOG_RETRIEVE_SUCCESS,
+            data:result
+        })
+    }).catch(error =>{
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    })
+} catch (error) {
+    return res.json({
+        code:Constant.ERROR_CODE,
+        massage:Constant.SOMETHING_WENT_WRONG,
+        data:error
+    })
+}
+
+}
+
+blogs.getBlogsByCategoryname = async (req,res)=>{
+    try {
+        let {name} = req.body;
+        blog_category.findAll({
+            where:{
+                [Op.or]:[
+                    {
+                        name:name
+                    },
+                    {
+                        name_en:name
+                    }
+                ],
+                status:1
+            },
+            include: [blog]
+           
+        }).then(result =>{
+            return res.json({
+                code:Constant.SUCCESS_CODE,
+                massage:Constant.BLOG_RETRIEVE_SUCCESS,
+                data:result
+            })
+        }).catch(error =>{
+            return res.json({
+                code:Constant.ERROR_CODE,
+                massage:Constant.SOMETHING_WENT_WRONG,
+                data:error
+            })
+        })
+    } catch (error) {
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    }
+    
+    }
+
+    blogs.getBlogsByCategoryId = async (req,res)=>{
+        try {
+            let {id} = req.body;
+            blog_category.findAll({
+                where:{
+                    id:id,
+                    status:1
+                },
+                include: [blog]
+               
+            }).then(result =>{
+                return res.json({
+                    code:Constant.SUCCESS_CODE,
+                    massage:Constant.BLOG_RETRIEVE_SUCCESS,
+                    data:result
+                })
+            }).catch(error =>{
+                return res.json({
+                    code:Constant.ERROR_CODE,
+                    massage:Constant.SOMETHING_WENT_WRONG,
+                    data:error
+                })
+            })
+        } catch (error) {
+            return res.json({
+                code:Constant.ERROR_CODE,
+                massage:Constant.SOMETHING_WENT_WRONG,
+                data:error
+            })
+        }
+        
+        }
+
+blogs.getAllBlogsCategory = async (req,res)=>{
+    try {
+        blog_category.findAll({
+            where:{
+                status:1
+            }
+        }).then(result =>{
+            return res.json({
+                code:Constant.SUCCESS_CODE,
+                massage:Constant.BLOG_RETRIEVE_SUCCESS,
+                data:result
+            })
+        }).catch(error =>{
+            return res.json({
+                code:Constant.ERROR_CODE,
+                massage:Constant.SOMETHING_WENT_WRONG,
+                data:error
+            })
+        })
+    } catch (error) {
+        return res.json({
+            code:Constant.ERROR_CODE,
+            massage:Constant.SOMETHING_WENT_WRONG,
+            data:error
+        })
+    }
+    
+}
+
+
+module.exports = blogs;

@@ -1,19 +1,13 @@
 module.exports = (sequelize, Sequelize) => {
-    const blog = sequelize.define("blog", {
-        title: {
+    const event = sequelize.define("event", {
+        name: {
         type: Sequelize.STRING
       },
-      title_en: {
+      name_en: {
         type: Sequelize.STRING
-      },
-      category_id :{
-        type: Sequelize.INTEGER(11)
       },
       userId :{
         type: Sequelize.INTEGER(11)
-      },
-      url:{
-        type:Sequelize.STRING
       },
       date:{
           type:Sequelize.DATE(6)
@@ -42,5 +36,5 @@ module.exports = (sequelize, Sequelize) => {
         timestamps:true
     });
   
-    return blog;
+    return event;
   };
