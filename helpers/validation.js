@@ -23,7 +23,7 @@ validation.checkUserData = async (data) => {
             .email()
             .required()
     }).with('last_name', 'first_name')
-        .with('email', 'password')
+        .with('email', 'password').unknown();
 
     try {
 
