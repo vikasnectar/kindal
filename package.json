@@ -1,11 +1,12 @@
 {
-  "name": "test",
+  "name": "kindal",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "dev": "set NODE_ENV=development&& nodemon server.js",
-    "prod": "set NODE_ENV=production&& nodemon server.js"
+    "prod": "set NODE_ENV=production&& nodemon server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,5 +28,17 @@
     "nodemailer": "^6.7.0",
     "nodemon": "^2.0.14",
     "sequelize": "^6.8.0"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikasnectar/kindal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vikasnectar/kindal/issues"
+  },
+  "homepage": "https://github.com/vikasnectar/kindal#readme"
 }
