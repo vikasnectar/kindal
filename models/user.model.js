@@ -22,6 +22,10 @@ module.exports = (sequelize, Sequelize) => {
     city: {
       type: Sequelize.STRING
     },
+    role: {
+      type: Sequelize.INTEGER(11),
+      defaultValue: 2 // 1 for admin , 2 for user, 3 for consignee
+    },
     phone: {
       type: Sequelize.INTEGER(11)
     },

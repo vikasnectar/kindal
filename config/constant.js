@@ -39,4 +39,7 @@ module.exports = {
     EVENT_CATEGORY_SAVE_SUCCESS: 'Blog category created successfully',
     EVENT_CATEGORY_UPDATED_SUCCESS: 'Event category updated successfully',
     EVENT_CATEGORY_DELETED_SUCCESS: 'Event category deleted successfully',
+    BOOK_CATEGORY_SAVE_SUCCESS: 'Book category created successfully',
+    BOOK_CATEGORY_UPDATED_SUCCESS: 'Book category updated successfully',
+    BOOK_CATEGORY_DELETED_SUCCESS: 'Book category deleted successfully',
 }

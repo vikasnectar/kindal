@@ -25,6 +25,7 @@ db.blog_comment = require("./blog.comment.model.js")(sequelize, Sequelize);
 db.event = require("./event.model.js")(sequelize, Sequelize);
 db.event_category = require("./event_category.model.js")(sequelize, Sequelize);
 
+db.book_category = require("./book_category.model.js")(sequelize, Sequelize);
 
 db.admin.hasMany(db.blog)
 db.blog.belongsTo(db.admin)
