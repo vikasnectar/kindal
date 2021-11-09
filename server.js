@@ -50,8 +50,6 @@ app.use((req, res, next) => {
 })
 
 if (process.env.NODE_ENV == "production") {
-
-    console.log(config.PORT)
     httpServer = http.createServer(app);
     // for production 
     //var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');

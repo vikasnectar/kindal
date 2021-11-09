@@ -11,19 +11,10 @@ validation.checkUserData = async (data) => {
 
         password: Joi.string()
             .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-
-        gendar: Joi.string(),
-
-        city: Joi.string(),
-        phone: Joi.number(),
-
-        dob_date: Joi.string(),
-
         email: Joi.string()
             .email()
             .required()
-    }).with('last_name', 'first_name')
-        .with('email', 'password').unknown();
+    }).unknown();
 
     try {
 
@@ -43,7 +34,6 @@ validation.userLogin = async (data) => {
             .email()
             .required()
     })
-        .with('password', 'userName');
 
     try {
 

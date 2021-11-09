@@ -14,6 +14,7 @@ module.exports = {
     USER_SAVE_SUCCESS: 'Registration completed successfully',
     SOMETHING_WENT_WRONG: 'Something went wrong',
     USER_LOGIN_SUCCESS: 'User Login successfully',
+    USER_VERIFICATION_SUCCESS: 'User verified',
     USER_EMAIL_PASSWORD: "You have entered an invalid email or password",
     EMAIL_VERIFIED: 'Email successfully verified.',
     INVALID_TOKEN: "Invalid Token",

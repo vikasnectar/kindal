@@ -17,31 +17,19 @@ let admin = {};
 admin.userRegistration = async function (req, res) {
 
   try {
-    let { first_name, last_name, email, password, gendar, city, phone, dob_date } = req.body;
-    let userData = {
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      password: password,
-      repeat_password: password,
-      gendar: gendar,
-      city: city,
-      phone: phone,
-      dob_date: dob_date
-    }
 
-    // let data = await validation.checkUserData(userData)
-    // if (data.message) {
-    //   return res.json({
-    //     code: Constant.ERROR_CODE,
-    //     massage: Constant.INVAILID_DATA,
-    //     data: data.message
-    //   })
-    // } else {
+    let userData = await validation.checkUserData(req.body)
+    if (userData.message) {
+      return res.json({
+        code: Constant.ERROR_CODE,
+        massage: Constant.INVAILID_DATA,
+        data: userData.message
+      })
+    } else {
       userData.verification_token = utility.randomString(24);
       let result = await user.findAll({
         where: {
-          email: email
+          email: userData.email
         }
       })
       if (result.length > 0) {
@@ -49,15 +37,15 @@ admin.userRegistration = async function (req, res) {
         return res.json({
           code: Constant.FORBIDDEN_CODE,
           massage: Constant.EMAIL_ALREADY_REGISTERED,
-          data: result.length
+          data: null
         })
       } else {
 
-        userData.password = bcrypt.hashSync(password, salt);
+        userData.password = bcrypt.hashSync(userData.password, salt);
         let result = await user.create(userData);
         let mailOptions = {
           from: 'vikas <vikas.kushwah@nectarinfotel.com>',
-          to: email,
+          to: userData.email,
           subject: 'kindal',
           text: 'Email verification lik',
           html: '<h1>Email verification lik<h1>: http://localhost:3000/admin/emailVerification/' + userData.verification_token
@@ -70,7 +58,7 @@ admin.userRegistration = async function (req, res) {
         })
 
       }
-    // }
+    }
 
   }
   catch (err) {
@@ -86,6 +74,24 @@ admin.userRegistration = async function (req, res) {
 }
 
 
+admin.getUserByToken = async(req,res)=>{
+    try {
+      const SECRET = process.env.SECRET;
+      const { authorization } = req.headers;
+      const decoded = jwt.verify(authorization, SECRET);
+      return res.json({
+          code: Constant.SUCCESS_CODE,
+          massage: Constant.USER_VERIFICATION_SUCCESS,
+          data: decoded
+        })
+  } catch (error) {
+      return res.json({
+          code: Constant.FORBIDDEN_CODE,
+          massage: Constant.INVALID_TOKEN,
+          data: null
+      })
+  }
+}
 admin.userLogin = async (req, res) => {
   try {
     let { userName, password } = req.body;
