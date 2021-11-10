@@ -42,4 +42,6 @@ module.exports = {
     BOOK_CATEGORY_SAVE_SUCCESS: 'Book category created successfully',
     BOOK_CATEGORY_UPDATED_SUCCESS: 'Book category updated successfully',
     BOOK_CATEGORY_DELETED_SUCCESS: 'Book category deleted successfully',
+    STORE_SAVE_SUCCESS: 'Store Saved successfully',
+    STORE_DELETED_SUCCESS: 'Store deleted successfully',
 }

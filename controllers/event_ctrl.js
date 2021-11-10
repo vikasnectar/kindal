@@ -120,11 +120,7 @@ events.edit = async (req, res) => {
 
 events.getAllEvents = async (req, res) => {
     try {
-        event.findAll({
-            where: {
-                status: 1
-            }
-        }).then(result => {
+        event.findAll().then(result => {
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: Constant.EVENT_RETRIEVE_SUCCESS,
@@ -153,8 +149,7 @@ events.getEventBySlug = async (req, res) => {
         let {slug} =  req.body;
         event.findOne({
             where: {
-                slug:slug,
-                status: 1
+                slug:slug
             }
         }).then(result => {
             return res.json({
@@ -271,14 +266,10 @@ events.getEventsByCategoryname = async (req, res) => {
                     {
                         name_en: name
                     }
-                ],
-                status: 1
+                ]
             },
             include: [{
-                model:event,
-                where:{
-                    status: 1
-                }
+                model:event
             }]
 
         }).then(result => {
@@ -310,14 +301,10 @@ events.getEventsByCategoryId = async (req, res) => {
         let { id } = req.body;
         event_category.findAll({
             where: {
-                id: id,
-                status: 1
+                id: id
             },
             include: [{
-                model:event,
-                where:{
-                    status: 1
-                }
+                model:event
             }]
 
         }).then(result => {
@@ -440,8 +427,7 @@ events.deleteEventCategory = async (req, res) => {
         let { id } = req.body;
         event_category.findOne({
             where: {
-                id: id,
-                status: 1
+                id: id
             }
         }).then(async (result) => {
             if (result) {
@@ -486,11 +472,7 @@ events.deleteEventCategory = async (req, res) => {
 
 events.getAllEventsCategory = async (req, res) => {
     try {
-        event_category.findAll({
-            where: {
-                status: 1
-            }
-        }).then(result => {
+        event_category.findAll().then(result => {
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: Constant.EVENT_RETRIEVE_SUCCESS,

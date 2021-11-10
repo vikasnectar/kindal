@@ -5,6 +5,7 @@ const db = require("../models");
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 const user = db.admin;
+const store = db.store;
 const Op = db.Sequelize.Op;
 const utility = require('../helpers/utility')
 const validation = require('../helpers/validation')
@@ -327,8 +328,143 @@ admin.changePassword = async (req, res) => {
       data: null
     })
   }
+}
 
 
+admin.addConsignee = async function (req, res) {
+
+  try {
+
+          let {first_name,last_name,email} = req.body;
+          let userData = {
+              first_name:first_name,
+              last_name:last_name,
+              email:email,
+              role:3,
+              status:1
+          }
+      userData.password = utility.randomString(8);
+      let result = await user.findAll({
+        where: {
+          email: userData.email
+        }
+      })
+      if (result.length > 0) {
+
+        return res.json({
+          code: Constant.FORBIDDEN_CODE,
+          massage: Constant.EMAIL_ALREADY_REGISTERED,
+          data: null
+        })
+      } else {
+
+        userData.password = bcrypt.hashSync(userData.password, salt);
+        let result = await user.create(userData);
+        return res.json({
+          code: Constant.SUCCESS_CODE,
+          massage: Constant.USER_SAVE_SUCCESS,
+          data: {id:result.id}
+        })
+
+      }
+
+  }
+  catch (err) {
+
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.SOMETHING_WENT_WRONG,
+      data: null
+    })
+
+  }
+
+}
+
+
+
+admin.addStore = async function (req, res) {
+
+  try {
+
+    let userData = await validation.store(req.body)
+    if (userData.message) {
+      return res.json({
+        code: Constant.ERROR_CODE,
+        massage: Constant.INVAILID_DATA,
+        data: userData.message
+      })
+    }else{
+        let result = await store.create(userData);
+        return res.json({
+          code: Constant.SUCCESS_CODE,
+          massage: Constant.STORE_SAVE_SUCCESS,
+          data: result
+        })
+    }
+      
+
+  }
+  catch (err) {
+
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.SOMETHING_WENT_WRONG,
+      data: null
+    })
+
+  }
+
+}
+
+
+
+admin.deleteStore = async (req, res) => {
+  try {
+
+      let { id } = req.body;
+      
+      store.findOne({
+          where: {
+              id: id
+          }
+      }).then(async (result) => {
+          if (result) {
+              let storeData = {
+                  status: 0
+
+              }
+              result.update(storeData)
+
+              return res.json({
+                  code: Constant.SUCCESS_CODE,
+                  massage: Constant.STORE_DELETED_SUCCESS,
+                  data: result
+              })
+
+          } else {
+              return res.json({
+                  code: Constant.ERROR_CODE,
+                  massage: Constant.SOMETHING_WENT_WRONG,
+                  data: result
+              })
+          }
+
+      }).catch(error => {
+          return res.json({
+              code: Constant.ERROR_CODE,
+              massage: Constant.SOMETHING_WENT_WRONG,
+              data: error
+          })
+      })
+
+  } catch (error) {
+      return res.json({
+          code: Constant.ERROR_CODE,
+          massage: Constant.SOMETHING_WENT_WRONG,
+          data: error
+      })
+  }
 
 }
 

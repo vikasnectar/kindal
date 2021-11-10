@@ -4,6 +4,9 @@ const config =  require('../config');
 const Constant = require('../config/constant');
 const db = require("../models");
 const book_category = db.book_category;
+const book = db.books;
+const book_tag = db.book_tag;
+const tag_relationship =  db.tag_relationship;
 let books ={};
 
 books.addBookCategory = async (req, res) => {

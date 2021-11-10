@@ -46,4 +46,25 @@ validation.userLogin = async (data) => {
 }
 
 
+validation.store = async (data) => {
+    const schema = Joi.object({
+        name: Joi.string().required(),
+        type: Joi.string().required(),
+        address: Joi.string().required(),
+        timing: Joi.string().required(),
+        userId: Joi.number().required(),
+        description: Joi.string(),
+        description_en: Joi.string()
+    })
+
+    try {
+
+        const value = await schema.validateAsync(data);
+        return value;
+    }
+    catch (err) {
+        return err;
+    }
+}
+
 module.exports = validation;

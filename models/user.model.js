@@ -24,7 +24,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     role: {
       type: Sequelize.INTEGER(11),
-      defaultValue: 2 // 1 for admin , 2 for user, 3 for consignee
+      defaultValue: 2 // 1 for superadmin , 2 for admin, 3 for consignee , 4 for auther , 5 for client (customer)
     },
     phone: {
       type: Sequelize.INTEGER(11)

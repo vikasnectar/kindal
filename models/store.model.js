@@ -1,10 +1,19 @@
 module.exports = (sequelize, Sequelize) => {
-    const Book_category = sequelize.define("book_category", {
+    const Store = sequelize.define("store", {
       name: {
         type: Sequelize.STRING
       },
-      name_en: {
+      type: {
         type: Sequelize.STRING
+      },
+      address: {
+        type: Sequelize.STRING
+      },
+      timing: {
+        type: Sequelize.STRING
+      },
+      userId: {
+        type: Sequelize.INTEGER(11)
       },
       description: {
         type: Sequelize.TEXT
@@ -17,10 +26,9 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false, 
         defaultValue: true
       }
-    },
-      {
-        timestamps: true
-      });
+    }, {
+      timestamps: true
+    });
   
-    return Book_category;
+    return Store;
   };

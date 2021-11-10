@@ -124,12 +124,10 @@ blogs.delete = async (req, res) => {
     try {
 
         let { id } = req.body;
-        let { userId } = req.user;
-
+        
         blog.findOne({
             where: {
-                id: id,
-                status: 1
+                id: id
             }
         }).then(async (result) => {
             if (result) {
@@ -269,8 +267,7 @@ blogs.deleteBlogCategory = async (req, res) => {
         let { id } = req.body;
         blog_category.findOne({
             where: {
-                id: id,
-                status: 1
+                id: id
             }
         }).then(async (result) => {
             if (result) {
@@ -315,16 +312,10 @@ blogs.deleteBlogCategory = async (req, res) => {
 blogs.getAllBlogs = async (req, res) => {
     try {
         blog.findAll({
-            where: {
-                status: 1
-            },
             include: [{
                 model:blog_category,
                 attributes:["id","name","name_en","description",
-                "description_en"],
-                where: {
-                    status: 1
-                } 
+                "description_en"]
             }]
         }).then(result => {
             return res.json({
@@ -352,11 +343,7 @@ blogs.getAllBlogs = async (req, res) => {
 
 blogs.getAllBlogsByMonth = async (req, res) => {
     try {
-        blog.findAll({
-            where: {
-                status: 1
-            }
-        }).then(result => {
+        blog.findAll().then(result => {
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: Constant.BLOG_RETRIEVE_SUCCESS,
@@ -384,23 +371,16 @@ blogs.getBlogBySlug = async (req, res) => {
         let { slug } = req.body;
         blog.findOne({
             where: {
-                slug: slug,
-                status: 1
+                slug: slug
             },
             include: [{
                 model:blog_category,
                 attributes:["id","name","name_en","description",
-                "description_en"],
-                where: {
-                    status: 1
-                } 
+                "description_en"]
             },{
                 model:blog_comment,
                 attributes:["name","email","website",
-                "comment"],
-                where: {
-                    status: 1
-                } 
+                "comment"]
             }]
         }).then(result => {
             return res.json({
@@ -437,8 +417,7 @@ blogs.getBlogsByCategoryname = async (req, res) => {
                     {
                         name_en: name
                     }
-                ],
-                status: 1
+                ]
             },
             include: [blog]
 
@@ -470,14 +449,10 @@ blogs.getBlogsByCategoryId = async (req, res) => {
         let { id } = req.body;
         blog_category.findAll({
             where: {
-                id: id,
-                status: 1
+                id: id
             },
             include: [{
-                    model:blog,
-                    where:{
-                        status: 1
-                    }
+                    model:blog
                 }]
 
         }).then(result => {
@@ -505,11 +480,7 @@ blogs.getBlogsByCategoryId = async (req, res) => {
 
 blogs.getAllBlogsCategory = async (req, res) => {
     try {
-        blog_category.findAll({
-            where: {
-                status: 1
-            }
-        }).then(result => {
+        blog_category.findAll().then(result => {
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: Constant.BLOG_RETRIEVE_SUCCESS,

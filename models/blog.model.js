@@ -35,12 +35,12 @@ module.exports = (sequelize, Sequelize) => {
     },
     approved: {
       type: Sequelize.BOOLEAN,
-      default: false
+      defaultValue: false
     },
     status: {
       type: Sequelize.BOOLEAN,
       allowNull: false, 
-      defaultValue: false
+      defaultValue: true
     }
   }, {
     timestamps: true
