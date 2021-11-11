@@ -34,7 +34,14 @@ db.books_transactions =  require('./books_transactions.model.js')(sequelize,Sequ
 db.store =  require('./store.model.js')(sequelize,Sequelize)
 
 
-
+db.admin.hasMany(db.books_transactions,{
+  foreignKey: "from",
+  foreignKey: "to"
+})
+db.books_transactions.belongsTo(db.admin,{
+  foreignKey: "from",
+  foreignKey: "to"
+})
 
 db.admin.hasMany(db.blog)
 db.blog.belongsTo(db.admin)

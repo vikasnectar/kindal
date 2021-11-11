@@ -67,4 +67,25 @@ validation.store = async (data) => {
     }
 }
 
+validation.transaction = async (data) => {
+    const schema = Joi.object({
+        from: Joi.number().required(),
+        to: Joi.number().required(),
+        storeId: Joi.number().required(),
+        book_qty: Joi.number().required(),
+        book_details: Joi.string(),
+        received: Joi.number()
+    }).unknown();
+
+    try {
+
+        const value = await schema.validateAsync(data);
+        return value;
+    }
+    catch (err) {
+        return err;
+    }
+}
+
+
 module.exports = validation;

@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
 var admin = require('../controllers/admin_ctrl')
+var store = require('../controllers/store_ctrl')
 const middileware = require('../middileware')
 // define the home page route
 // router.get('/', admin.test);
@@ -14,8 +15,8 @@ router.post('/resetPassword', admin.resetPassword);
 router.post('/changePassword',middileware.checkAuthentication, admin.changePassword);
 router.post('/addConsignee',middileware.checkAuthentication,admin.addConsignee);
 
-router.post('/addStore',middileware.checkAuthentication,admin.addStore);
-router.delete('/deleteStore',middileware.checkAuthentication,admin.deleteStore);
+router.post('/addStore',middileware.checkAuthentication,store.addStore);
+router.delete('/deleteStore',middileware.checkAuthentication,store.deleteStore);
 
 
 

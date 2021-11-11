@@ -121,9 +121,12 @@ events.edit = async (req, res) => {
 events.getAllEvents = async (req, res) => {
     try {
         event.findAll().then(result => {
+
+            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.EVENT_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -152,9 +155,10 @@ events.getEventBySlug = async (req, res) => {
                 slug:slug
             }
         }).then(result => {
+            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.EVENT_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -183,9 +187,10 @@ events.getEventsByUserId = async (req, res) => {
             },
             include: [event]
         }).then(result => {
+            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.EVENT_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -273,9 +278,10 @@ events.getEventsByCategoryname = async (req, res) => {
             }]
 
         }).then(result => {
+            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.EVENT_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -308,9 +314,10 @@ events.getEventsByCategoryId = async (req, res) => {
             }]
 
         }).then(result => {
+            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.EVENT_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -473,9 +480,10 @@ events.deleteEventCategory = async (req, res) => {
 events.getAllEventsCategory = async (req, res) => {
     try {
         event_category.findAll().then(result => {
+            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.EVENT_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {

@@ -33,12 +33,14 @@ var admin = require('./route/admin')
 var blog = require('./route/blog')
 var books = require('./route/books')
 var event = require('./route/event')
+var store = require('./route/store')
 
 // user route file
 app.use('/admin', admin)
 app.use('/blog', blog)
 app.use('/books', books)
 app.use('/event', event)
+app.use('/store', store)
 
 // Handling non matching request from the client
 app.use((req, res, next) => {

@@ -318,9 +318,11 @@ blogs.getAllBlogs = async (req, res) => {
                 "description_en"]
             }]
         }).then(result => {
+
+            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.BLOG_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -383,9 +385,11 @@ blogs.getBlogBySlug = async (req, res) => {
                 "comment"]
             }]
         }).then(result => {
+
+            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.BLOG_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -422,9 +426,11 @@ blogs.getBlogsByCategoryname = async (req, res) => {
             include: [blog]
 
         }).then(result => {
+
+            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.BLOG_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -456,9 +462,11 @@ blogs.getBlogsByCategoryId = async (req, res) => {
                 }]
 
         }).then(result => {
+            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.BLOG_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {
@@ -481,9 +489,11 @@ blogs.getBlogsByCategoryId = async (req, res) => {
 blogs.getAllBlogsCategory = async (req, res) => {
     try {
         blog_category.findAll().then(result => {
+
+            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
-                massage: Constant.BLOG_RETRIEVE_SUCCESS,
+                massage: massage,
                 data: result
             })
         }).catch(error => {

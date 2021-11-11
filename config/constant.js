@@ -30,6 +30,7 @@ module.exports = {
     BLOG_CATEGORY_UPDATED_SUCCESS: 'Blog category updated successfully',
     BLOG_CATEGORY_DELETED_SUCCESS: 'Blog category deleted successfully',
     BLOG_RETRIEVE_SUCCESS: 'Blog retrieve successfully',
+    NO_DATA_FOUND: 'No data found',
     BLOG_CATEGORY_SAVE_SUCCESS: 'Blog category created successfully',
     BLOG_COMMENT_SAVE_SUCCESS: 'Blog comment created successfully',
     EVENT_RETRIEVE_SUCCESS: 'Events retrieve successfully',

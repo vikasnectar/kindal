@@ -7,6 +7,9 @@ module.exports = (sequelize, Sequelize) => {
       to: {
         type: Sequelize.INTEGER(11)
       },
+      storeId: {
+        type: Sequelize.INTEGER(11)
+      },
       book_qty: {
         type: Sequelize.INTEGER(11)
       },
@@ -14,9 +17,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.TEXT
       },
       received: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.INTEGER(11),
         allowNull: false, 
-        defaultValue: false
+        defaultValue: 0 // 0 pending , 1 received, 2 decline
       },
       status: {
         type: Sequelize.BOOLEAN,
