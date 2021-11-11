@@ -11,7 +11,7 @@ router.post('/getUserByToken', admin.getUserByToken);
 router.get('/emailVerification/:token', admin.emailVerification);
 router.post('/forgotPassword', admin.forgotPassword);
 router.post('/resetPassword', admin.resetPassword);
-router.post('/changePassword', admin.changePassword);
+router.post('/changePassword',middileware.checkAuthentication, admin.changePassword);
 router.post('/addConsignee',middileware.checkAuthentication,admin.addConsignee);
 
 router.post('/addStore',middileware.checkAuthentication,admin.addStore);

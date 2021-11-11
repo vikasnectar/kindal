@@ -292,7 +292,8 @@ admin.resetPassword = async (req, res) => {
 
 admin.changePassword = async (req, res) => {
   try {
-    let { oldPassword, password,email } = req.body;
+    let { oldPassword, password } = req.body;
+    let {email} =  req.user;
 
     user.findOne({
       where: {
