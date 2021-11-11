@@ -245,7 +245,7 @@ stores.getAllTransactionBystoreId = async (req, res) => {
                return res.json({
                 code: Constant.ERROR_CODE,
                 massage: Constant.SOMETHING_WENT_WRONG,
-                data: error
+                data: err
             })
      })
     } catch (error) {
@@ -283,7 +283,7 @@ stores.getTransactionDetails = async (req, res) => {
                return res.json({
                 code: Constant.ERROR_CODE,
                 massage: Constant.SOMETHING_WENT_WRONG,
-                data: error
+                data: err
             })
      })
     } catch (error) {
