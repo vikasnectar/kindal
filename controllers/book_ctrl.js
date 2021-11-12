@@ -151,6 +151,52 @@ books.deleteBookCategory = async (req, res) => {
 
 }
 
+
+books.getAllCategory = async (req, res) => {
+    try {
+
+            let data = await book_category.findAll({
+                where:{
+                    status: true
+                }
+            })
+            let massage =  (data.length>0)?Constant.BOOK_CATEGORY_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
+
+books.getAllTags = async (req, res) => {
+    try {
+
+            let data = await book_tag.findAll({})
+            let massage =  (data.length>0)?Constant.BOOK_TAGS_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
 books.add = async (req,res)=>{
 
         try {

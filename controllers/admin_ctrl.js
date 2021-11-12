@@ -382,4 +382,35 @@ admin.addConsignee = async function (req, res) {
 
 }
 
+
+admin.getAllConsignee = async function (req, res) {
+
+  try {
+        let result = await user.findAll({
+          where: {
+            role:3
+          },
+          attributes:["id","first_name","last_name"]
+        })
+
+        let massage =  (result.length>0)?Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: result
+            })
+
+  }
+  catch (err) {
+
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.SOMETHING_WENT_WRONG,
+      data: null
+    })
+
+  }
+
+}
+
 module.exports = admin;

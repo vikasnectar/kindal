@@ -6,6 +6,10 @@ var middileware = require('../middileware')
 router.post('/addBookCategory', middileware.checkAuthentication, book.addBookCategory);
 router.put('/editBookCategory', middileware.checkAuthentication, book.editBookCategory);
 router.delete('/deleteBookCategory', middileware.checkAuthentication, book.deleteBookCategory);
+router.get('/getAllCategory', book.getAllCategory);
+router.get('/getAllTags', book.getAllTags);
+
+
 
 //books router
 
