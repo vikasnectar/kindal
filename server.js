@@ -38,7 +38,7 @@ var store = require('./route/store')
 // user route file
 app.use('/admin', admin)
 app.use('/blog', blog)
-app.use('/books', books)
+app.use('/book', books)
 app.use('/event', event)
 app.use('/store', store)
 

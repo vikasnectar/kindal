@@ -17,7 +17,7 @@ blogs.add = async (req, res) => {
         if (req.files) {
             fileName = await utility.fileupload(req.files)
         }
-        let slug = await utility.gerrateSlug(title,blog);
+        let slug = await utility.generateSlug(title,blog);
         let blogData = {
             title: title,
             title_en: title_en,

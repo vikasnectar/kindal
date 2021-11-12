@@ -21,7 +21,7 @@ events.add = async (req, res) => {
         if (req.files) {
             fileName = await utility.fileupload(req.files)
         }
-        let slug = await utility.gerrateSlug(name,event);
+        let slug = await utility.generateSlug(name,event);
 
         let eventData = {
             name: name,

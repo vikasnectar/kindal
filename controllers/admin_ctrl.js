@@ -200,7 +200,7 @@ admin.forgotPassword = async (req, res) => {
       }
     }).then(async (result) => {
       if (result) {
-        var Token = await utility.gerrateToken(20);
+        var Token = await utility.generateToken(20);
         let resetPasswordExpires = Date.now() + 3600000;
         var UserData = {
           verification_token: Token,

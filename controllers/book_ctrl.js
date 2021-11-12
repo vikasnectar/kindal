@@ -3,10 +3,12 @@ var jwt = require('jsonwebtoken');
 const config =  require('../config');
 const Constant = require('../config/constant');
 const db = require("../models");
+const utility = require('../helpers/utility');
 const book_category = db.book_category;
 const book = db.books;
 const book_tag = db.book_tag;
 const tag_relationship =  db.tag_relationship;
+
 let books ={};
 
 books.addBookCategory = async (req, res) => {
@@ -152,11 +154,16 @@ books.deleteBookCategory = async (req, res) => {
 books.add = async (req,res)=>{
 
         try {
-            book.create(req.body).then(result=>{
+            let {tag} = req.body;
+            book.create(req.body).then( async result =>{
+
+                if(tag){
+                    let data = await utility.checkTagAndCreate(tag,result.id,book_tag,tag_relationship);
+                }
                 return res.json({
                     code: Constant.SUCCESS_CODE,
                     massage: Constant.BOOK_CATEGORY_SAVE_SUCCESS,
-                    data: data
+                    data: result
                 })
             }).catch(error=>{
 
