@@ -149,6 +149,124 @@ books.deleteBookCategory = async (req, res) => {
 
 }
 
+books.add = async (req,res)=>{
+
+        try {
+            book.create(req.body).then(result=>{
+                return res.json({
+                    code: Constant.SUCCESS_CODE,
+                    massage: Constant.BOOK_CATEGORY_SAVE_SUCCESS,
+                    data: data
+                })
+            }).catch(error=>{
+
+                return res.json({
+                    code: Constant.ERROR_CODE,
+                    massage: Constant.SOMETHING_WENT_WRONG,
+                    data: result
+                })
+            })
+        } catch (error) {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        }
+
+}
 
 
+books.edit = async (req, res) => {
+    try {
+
+        let { id } = req.body;
+        book.findOne({
+            where: {
+                id: id
+            }
+        }).then(async (result) => {
+            if (result) {
+                result.update(req.body)
+
+                return res.json({
+                    code: Constant.SUCCESS_CODE,
+                    massage: Constant.BOOK_CATEGORY_UPDATED_SUCCESS,
+                    data: result
+                })
+
+            } else {
+                return res.json({
+                    code: Constant.ERROR_CODE,
+                    massage: Constant.SOMETHING_WENT_WRONG,
+                    data: result
+                })
+            }
+
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
+
+books.delete = async (req, res) => {
+    try {
+
+        let { id } = req.body;
+        book.findOne({
+            where: {
+                id: id,
+                status: 1
+            }
+        }).then(async (result) => {
+            if (result) {
+                let bookData = {
+                    status: 0
+
+                }
+                result.update(bookData)
+
+                return res.json({
+                    code: Constant.SUCCESS_CODE,
+                    massage: Constant.BOOK_CATEGORY_DELETED_SUCCESS,
+                    data: result
+                })
+
+            } else {
+                return res.json({
+                    code: Constant.ERROR_CODE,
+                    massage: Constant.SOMETHING_WENT_WRONG,
+                    data: result
+                })
+            }
+
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
 module.exports = books;
