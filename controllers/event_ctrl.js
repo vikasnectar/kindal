@@ -15,7 +15,7 @@ let events = {};
 
 events.add = async (req, res) => {
     try {
-        let { name, name_en, date, time, description, description_en } = req.body;
+        let { name, name_en, date, time, description, description_en ,category_id } = req.body;
         let { userId } = req.user;
         let fileName = '';
         if (req.files) {
@@ -26,6 +26,7 @@ events.add = async (req, res) => {
         let eventData = {
             name: name,
             name_en: name_en,
+            category_id: category_id,
             date: date,
             time: time,
             slug:slug,
@@ -63,7 +64,7 @@ events.add = async (req, res) => {
 
 events.edit = async (req, res) => {
     try {
-        let { id, name, name_en, date, time, description, description_en } = req.body;
+        let { id, name, name_en, date, time, description, description_en , category_id } = req.body;
         let { userId } = req.user;
         let fileName = '';
         if (req.files) {
@@ -77,7 +78,8 @@ events.edit = async (req, res) => {
             description: description,
             description_en: description_en,
             image: fileName,
-            userId: userId
+            userId: userId,
+            category_id: category_id,
 
         }
         event.findOne({
@@ -120,7 +122,11 @@ events.edit = async (req, res) => {
 
 events.getAllEvents = async (req, res) => {
     try {
-        event.findAll().then(result => {
+        event.findAll({
+            include: [{
+                model:event_category
+            }]
+        }).then(result => {
 
             let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
 
