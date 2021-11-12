@@ -84,11 +84,20 @@ utility.checkTagAndCreate = (tags,bookId,book_tag,tag_relationship) => {
                                 bookId:bookId,
                                 tagId:t_result.id
                             }
-                            tag_relationship.create(relationship).then(r_result=>{
-                                resolve(r_result)
+                            tag_relationship.destroy({
+                                where :{
+                                    bookId:bookId  
+                                }
+                            }).then(data=>{
+                                tag_relationship.create(relationship).then(r_result=>{
+                                    resolve(r_result)
+                                }).catch(error=>{
+                                    reject(error)
+                                })
                             }).catch(error=>{
                                 reject(error)
                             })
+                            
                             
                         })
                    }else{
@@ -96,11 +105,20 @@ utility.checkTagAndCreate = (tags,bookId,book_tag,tag_relationship) => {
                             bookId:bookId,
                             tagId:result.id
                         }
-                        tag_relationship.create(relationship).then(r_result=>{                            
-                            resolve(r_result)
+                        tag_relationship.destroy({
+                            where :{
+                                bookId:bookId  
+                            }
+                        }).then(data =>{
+                            tag_relationship.create(relationship).then(r_result=>{                            
+                                resolve(r_result)
+                            }).catch(error=>{
+                                reject(error)
+                            })
                         }).catch(error=>{
                             reject(error)
                         })
+                       
                    }
             })
         

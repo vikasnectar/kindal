@@ -187,13 +187,18 @@ books.add = async (req,res)=>{
 books.edit = async (req, res) => {
     try {
 
-        let { id } = req.body;
+        let { id,tag } = req.body;
         book.findOne({
             where: {
                 id: id
             }
         }).then(async (result) => {
             if (result) {
+
+                if(tag){
+                    let data = await utility.checkTagAndCreate(tag,result.id,book_tag,tag_relationship);
+                }
+
                 result.update(req.body)
 
                 return res.json({
