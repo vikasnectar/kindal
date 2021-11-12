@@ -34,10 +34,32 @@ db.books_transactions =  require('./books_transactions.model.js')(sequelize,Sequ
 db.store =  require('./store.model.js')(sequelize,Sequelize)
 
 
+
+
+db.book_category.hasMany(db.books, {
+  foreignKey: "category_id"
+})
+db.books.belongsTo(db.book_category, {
+  foreignKey: "category_id"
+})
+
+db.books.belongsToMany(db.book_tag, {
+  through: "book_tag_relationships",
+  foreignKey: "bookId",
+});
+
+db.book_tag.belongsToMany(db.books, {
+  through: "book_tag_relationships",
+  foreignKey: "tagId",
+});
+
+
+
 db.admin.hasMany(db.books_transactions,{
   foreignKey: "from",
   foreignKey: "to"
 })
+
 db.books_transactions.belongsTo(db.admin,{
   foreignKey: "from",
   foreignKey: "to"

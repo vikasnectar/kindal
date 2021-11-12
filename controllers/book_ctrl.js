@@ -5,6 +5,7 @@ const Constant = require('../config/constant');
 const db = require("../models");
 const utility = require('../helpers/utility');
 const book_category = db.book_category;
+const { Op,sequelize } = require("sequelize");
 const book = db.books;
 const book_tag = db.book_tag;
 const tag_relationship =  db.tag_relationship;
@@ -327,4 +328,96 @@ books.delete = async (req, res) => {
     }
 
 }
+
+
+books.getBooks = async (req, res) => {
+    try {
+
+            let data = await book.findAll({
+                where:{
+                    status: true
+                },
+                include: [{
+                    model:book_category
+                }]
+            })
+            let massage =  (data.length>0)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
+books.getBooksByCategory = async (req, res) => {
+    try {
+                let {name} = req.body;
+            let data = await book_category.findOne({
+                where:{
+                    status: true,
+                    [Op.or]: [
+                        {
+                            name: name
+                        },
+                        {
+                            name_en: name
+                        }
+                    ]
+
+                },
+                include: [{
+                    model:book
+                }]
+            })
+            let massage =  (data)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
+books.getBooksBytag = async (req, res) => {
+    try {
+                let {slug} = req.body;
+            let data = await book_tag.findOne({
+                where:{
+                    name: slug
+                },
+                include: [{
+                    model:book
+                }]
+            })
+            let massage =  (data)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
 module.exports = books;

@@ -3,13 +3,15 @@ var router = express.Router()
 var book = require('../controllers/book_ctrl');
 var middileware = require('../middileware')
 // define the home page route
+router.get('/', book.getBooks);
 router.post('/addBookCategory', middileware.checkAuthentication, book.addBookCategory);
 router.put('/editBookCategory', middileware.checkAuthentication, book.editBookCategory);
 router.delete('/deleteBookCategory', middileware.checkAuthentication, book.deleteBookCategory);
 router.get('/getAllCategory', book.getAllCategory);
 router.get('/getAllTags', book.getAllTags);
 
-
+router.post('/getBooksByCategory', book.getBooksByCategory);
+router.post('/getBooksBytag', book.getBooksBytag);
 
 //books router
 
