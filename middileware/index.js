@@ -14,7 +14,7 @@ middileware.checkAuthentication = (req, res, next) => {
         next();
     } catch (error) {
         return res.json({
-            code: Constant.FORBIDDEN_CODE,
+            code: Constant.INVALID_CODE,
             massage: Constant.INVALID_TOKEN,
             data: null
         })
