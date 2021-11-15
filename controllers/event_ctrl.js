@@ -186,7 +186,8 @@ events.getEventBySlug = async (req, res) => {
 
 events.getEventsByUserId = async (req, res) => {
     try {
-        let { userId } = req.body;
+
+        let {userId} = req.user;
         admin.findAll({
             where: {
                 id: userId

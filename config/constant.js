@@ -12,6 +12,7 @@ module.exports = {
     EMAIL_ALREADY_REGISTERED: 'Email already registered.',
     INVAILID_DATA: 'Registration form data is not correct.',
     USER_SAVE_SUCCESS: 'Registration completed successfully',
+    USER_NOT_AUTHORIZED: 'You are not Authorized',
     SOMETHING_WENT_WRONG: 'Something went wrong',
     USER_LOGIN_SUCCESS: 'User Login successfully',
     USER_VERIFICATION_SUCCESS: 'User verified',

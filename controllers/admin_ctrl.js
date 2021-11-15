@@ -121,6 +121,7 @@ admin.userLogin = async (req, res) => {
           last_name: result.last_name,
           email: result.email,
           gendar: result.gendar,
+          role:result.role,
           city: result.city,
           phone: result.phone,
           dob_date: result.dob_date

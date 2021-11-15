@@ -7,9 +7,11 @@ const middileware = require('../middileware')
 router.get('/', event.getAllEvents);
 router.post('/getEventBySlug', event.getEventBySlug);
 router.post('/add', middileware.checkAuthentication, event.add);
-router.put('/edit', middileware.checkAuthentication, event.edit);
-router.delete('/delete', middileware.checkAuthentication, event.delete);
-router.post('/getEventsByUserId', event.getEventsByUserId);
+router.put('/edit', middileware.checkAuthentication,middileware.checkEventAuthentication, event.edit);
+router.delete('/delete', middileware.checkAuthentication,middileware.checkEventAuthentication, event.delete);
+
+
+router.post('/getEventsByUserId', middileware.checkAuthentication, event.getEventsByUserId);
 
 
 router.post('/getEventsByCategoryname', event.getEventsByCategoryname);

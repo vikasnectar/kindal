@@ -6,11 +6,12 @@ const blog = require('../controllers/blog_ctrl')
 router.get('/', blog.getAllBlogs);
 router.post('/getBlogBySlug', blog.getBlogBySlug);
 router.post('/getAllBlogsByMonth', blog.getAllBlogsByMonth);
+router.get('/getBlogsByUser', middileware.checkAuthentication, blog.getBlogsByUser);
 
 
 router.post('/add', middileware.checkAuthentication, blog.add);
-router.put('/edit', middileware.checkAuthentication, blog.edit);
-router.delete('/delete', middileware.checkAuthentication, blog.delete);
+router.put('/edit', middileware.checkAuthentication,middileware.checkBlogDeleteAuthentication, blog.edit);
+router.delete('/delete', middileware.checkAuthentication, middileware.checkBlogDeleteAuthentication, blog.delete);
 
 
 router.post('/getBlogsByCategoryname', blog.getBlogsByCategoryname);

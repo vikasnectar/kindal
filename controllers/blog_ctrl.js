@@ -343,6 +343,44 @@ blogs.getAllBlogs = async (req, res) => {
 }
 
 
+blogs.getBlogsByUser = async (req, res) => {
+    try {
+        let {userId} = req.user;
+        blog.findAll({
+            where:{
+             userId :userId
+            },
+            include: [{
+                model:blog_category,
+                attributes:["id","name","name_en","description",
+                "description_en"]
+            }]
+        }).then(result => {
+
+            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: result
+            })
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
+
 blogs.getAllBlogsByMonth = async (req, res) => {
     try {
         blog.findAll().then(result => {
