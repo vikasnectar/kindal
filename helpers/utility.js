@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const crypto = require("crypto");
-
+const fs = require('fs');
+const path = require('path');
 var utility = {};
 utility.randomString = (length) => {
     var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -127,4 +128,16 @@ utility.checkTagAndCreate = (tags,bookId,book_tag,tag_relationship) => {
     })  
 }
 
+utility.uploadBase64Image = async (imgBase64)=>{
+    let name = await utility.randomString(12);
+    let filename = 'img_'+ name +'.png';
+
+    let file_path = 'C:\\Users\\acer\\Documents\\images';
+
+    var base64Data = imgBase64.replace(/^data:image\/png;base64,/, "");
+    fs.writeFile(file_path+"/"+filename, base64Data, 'base64', function(err) {
+    console.log(err);
+    });
+    return filename;
+}
 module.exports = utility;
