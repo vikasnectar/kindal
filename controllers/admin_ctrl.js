@@ -461,7 +461,7 @@ admin.getAllAuthor = async function (req, res) {
           where: {
             role: 4
           },
-          attributes:["id","first_name","last_name"]
+          attributes:["id","first_name","last_name","email","phone"]
         })
 
         let massage =  (result.length>0)?Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
@@ -523,7 +523,7 @@ admin.getUserById =  async (req,res)=>{
       where: {
         id:userId
       },
-      attributes:["id","first_name","last_name","role","email","gendar"]
+      attributes:["id","first_name","last_name","role","email","phone","gendar"]
     })
 
     let massage =  (result.length>0)?Constant.USER_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
