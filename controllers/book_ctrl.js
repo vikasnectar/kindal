@@ -360,7 +360,7 @@ books.getBooks = async (req, res) => {
 
 books.getBooksByFilter = async (req, res) => {
     try {
-            let {max_price,min_price,author} = req.body;
+            let {max_price,min_price,author,category_id} = req.body;
             let condition = {};
             if(max_price){
                 condition = {
@@ -373,10 +373,17 @@ books.getBooksByFilter = async (req, res) => {
                     }
                    
                 }
-                
-                author = (author)?condition.author = author:"";
+
             }   
             
+            if(author){
+                author =  author.split(',');
+                condition.author = {[Op.in]:author}
+            }
+
+            if(category_id){
+                condition.category_id = category_id
+            }
 
             let data = await book.findAll({
                 where:condition,
