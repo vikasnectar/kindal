@@ -8,15 +8,13 @@ const blog_comment = db.blog_comment;
 const { Op,sequelize } = require("sequelize");
 let blogs = {};
 
+
 blogs.add = async (req, res) => {
     try {
 
         let { title, title_en, category_id, url, date, time, description, description_en,image } = req.body;
         let { userId } = req.user;
         let fileName = '';
-        if(image){
-            fileName = await utility.uploadBase64Image(image) 
-        }
         let slug = await utility.generateSlug(title,blog);
         let blogData = {
             title: title,
@@ -34,12 +32,20 @@ blogs.add = async (req, res) => {
 
         let result = await blog.create(blogData);
         if (result) {
-            let data = await blog.findAll({})
+            
+	    if (image) {
+            fileName = await utility.uploadBase64Image(image)
+		
+	     let userData = {
+                image: fileName
 
+            }
+            result.update(userData)
+        }
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: Constant.BLOG_SAVE_SUCCESS,
-                data: data
+                data: result
             })
         } else {
             return res.json({

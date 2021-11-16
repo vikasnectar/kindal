@@ -28,12 +28,16 @@ utility.generateToken = (length) => {
 }
 
 utility.fileupload = (files) => {
-    return new Promise((resolve, reject) => {
-        var filedata = files.image.mv(__dirname + '/' + files.image.name, (error, data) => {
+    return new Promise(async (resolve, reject) => {
+        let name = await utility.randomString(5);
+        var currentPath = process.cwd();
+        var file_path = path.join(currentPath, '/public/images');
+
+        var filedata = files.image.mv(file_path + '/' + name + files.image.name, (error, data) => {
             if (error) {
                 reject(null);
             } else {
-                resolve(files.image.name);
+                resolve(name+files.image.name);
             }
         })
 
@@ -129,16 +133,24 @@ utility.checkTagAndCreate = (tags,bookId,book_tag,tag_relationship) => {
     })  
 }
 
-utility.uploadBase64Image = async (imgBase64)=>{
-    let name = await utility.randomString(12);
-    let filename = 'img_'+ name +'.png';
-    var currentPath = process.cwd();
-    var file_path = path.join(currentPath, '/public/images');
+utility.uploadBase64Image = (imgBase64)=>{
 
-    var base64Data = imgBase64.replace(/^data:image\/png;base64,/, "");
-    fs.writeFile(file_path+"/"+filename, base64Data, 'base64', function(err) {
-    console.log(err);
-    });
-    return filename;
+    return new Promise( async(resolve, reject) => {
+        let name = await utility.randomString(12);
+        let filename = 'img_'+ name +'.png';
+        var currentPath = process.cwd();
+        var file_path = path.join(currentPath, '/public/images');
+    
+        
+        var base64Data = imgBase64.replace(/^data:image\/png;base64,/, "");
+        fs.writeFile(file_path+"/"+filename, base64Data, 'base64', function(err) {
+        if(err){
+            reject(filename);
+        }
+        });
+        resolve(filename);
+
+    })
+   
 }
 module.exports = utility;
