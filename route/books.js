@@ -13,6 +13,8 @@ router.get('/getAllTags', book.getAllTags);
 router.post('/getBooksByCategory', book.getBooksByCategory);
 router.post('/getBooksBytag', book.getBooksBytag);
 
+router.post('/getBooksByFilter', book.getBooksByFilter);
+
 //books router
 
 router.post('/add', middileware.checkAuthentication, book.add);

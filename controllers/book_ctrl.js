@@ -357,6 +357,49 @@ books.getBooks = async (req, res) => {
 
 }
 
+
+books.getBooksByFilter = async (req, res) => {
+    try {
+            let {max_price,min_price,author} = req.body;
+            let condition = {};
+            if(max_price){
+                condition = {
+                    status: true,
+                    price :{
+                        [Op.and]:{
+                            [Op.lte]:max_price,
+                            [Op.gte]:min_price,
+                        }
+                    }
+                   
+                }
+                
+                author = (author)?condition.author = author:"";
+            }   
+            
+
+            let data = await book.findAll({
+                where:condition,
+                include: [{
+                    model:book_category
+                }]
+            })
+            let massage =  (data.length>0)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
 books.getBooksByCategory = async (req, res) => {
     try {
                 let {name} = req.body;
