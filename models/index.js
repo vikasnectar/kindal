@@ -55,14 +55,12 @@ db.book_tag.belongsToMany(db.books, {
 
 
 
-db.admin.hasMany(db.books_transactions,{
-  foreignKey: "from",
-  foreignKey: "to"
+db.admin.hasMany(db.books,{
+  foreignKey: "userId"
 })
 
-db.books_transactions.belongsTo(db.admin,{
-  foreignKey: "from",
-  foreignKey: "to"
+db.books.belongsTo(db.admin,{
+  foreignKey: "userId"
 })
 
 db.admin.hasMany(db.blog)

@@ -15,6 +15,7 @@ module.exports = {
     USER_NOT_AUTHORIZED: 'You are not Authorized',
     SOMETHING_WENT_WRONG: 'Something went wrong',
     USER_LOGIN_SUCCESS: 'User Login successfully',
+    USER_DATA_UPDATE_SUCCESS: 'User update successfully',
     USER_VERIFICATION_SUCCESS: 'User verified',
     USER_EMAIL_PASSWORD: "You have entered an invalid email or password",
     EMAIL_VERIFIED: 'Email successfully verified.',

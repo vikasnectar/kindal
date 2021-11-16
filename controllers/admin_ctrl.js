@@ -333,6 +333,44 @@ admin.changePassword = async (req, res) => {
 }
 
 
+admin.updateProfile = async (req, res) => {
+  try {
+    let {userId} =  req.user;
+
+    user.findOne({
+      where: {
+        id:userId
+      }
+    }).then((result) => {
+      if (result) {
+
+        result.update(req.body);
+        
+        return res.json({
+          code: Constant.SUCCESS_CODE,
+          massage: Constant.USER_DATA_UPDATE_SUCCESS,
+          data: null
+        });
+
+      } else {
+        return res.json({
+          code: Constant.ERROR_CODE,
+          massage: Constant.USER_RESET_PASSWORD,
+          data: null
+        })
+      }
+
+    })
+  } catch (error) {
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.USER_RESET_PASSWORD,
+      data: null
+    })
+  }
+}
+
+
 admin.addConsignee = async function (req, res) {
 
   try {
@@ -414,4 +452,35 @@ admin.getAllConsignee = async function (req, res) {
 
 }
 
+
+
+admin.getAllAuthor = async function (req, res) {
+
+  try {
+        let result = await user.findAll({
+          where: {
+            role: 4
+          },
+          attributes:["id","first_name","last_name"]
+        })
+
+        let massage =  (result.length>0)?Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: result
+            })
+
+  }
+  catch (err) {
+
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.SOMETHING_WENT_WRONG,
+      data: null
+    })
+
+  }
+
+}
 module.exports = admin;

@@ -9,12 +9,16 @@ const middileware = require('../middileware')
 router.post('/userRegistration', admin.userRegistration);
 router.post('/userLogin', admin.userLogin);
 router.post('/getUserByToken', admin.getUserByToken);
+router.get('/getAllAuthor', admin.getAllAuthor);
 router.get('/emailVerification/:token', admin.emailVerification);
 router.post('/forgotPassword', admin.forgotPassword);
 router.post('/resetPassword', admin.resetPassword);
 router.post('/changePassword',middileware.checkAuthentication, admin.changePassword);
 router.post('/addConsignee',middileware.checkAuthentication,admin.addConsignee);
 router.get('/getAllConsignee',middileware.checkAuthentication,admin.getAllConsignee);
+router.put('/updateProfile',middileware.checkAuthentication,admin.updateProfile);
+
+
 
 router.post('/addStore',middileware.checkAuthentication,store.addStore);
 router.delete('/deleteStore',middileware.checkAuthentication,store.deleteStore);
