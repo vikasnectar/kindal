@@ -10,6 +10,7 @@ const https = require('https');
 const db = require("./models");
 const fileUpload = require('express-fileupload')
 const Constant = require('./config/constant');
+const path = require('path');
 db.sequelize.sync();
 
 var httpServer;
@@ -29,6 +30,10 @@ app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: '/tmp/'
 }));
+
+var dir = path.join(__dirname, '/public/images');
+
+app.use('/images',express.static(dir));
 
 // import route file 
 var admin = require('./route/admin')
