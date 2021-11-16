@@ -16,7 +16,9 @@ var httpServer;
 const app = express();
 app.use(compression())
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ extended: false,limit: '50mb', extended: true }))
+app.use(express.json());
 
 // parse application/json
 app.use(bodyParser.json())

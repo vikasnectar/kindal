@@ -18,6 +18,8 @@ router.post('/addConsignee',middileware.checkAuthentication,admin.addConsignee);
 router.get('/getAllConsignee',middileware.checkAuthentication,admin.getAllConsignee);
 router.put('/updateProfile',middileware.checkAuthentication,admin.updateProfile);
 
+router.post('/getAllUsers',middileware.checkAuthentication,admin.getAllUsers);
+
 
 
 router.post('/addStore',middileware.checkAuthentication,store.addStore);

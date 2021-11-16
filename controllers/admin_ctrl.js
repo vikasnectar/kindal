@@ -483,4 +483,36 @@ admin.getAllAuthor = async function (req, res) {
   }
 
 }
+
+admin.getAllUsers = async function (req, res) {
+
+  try {
+        let result = await user.findAll({
+          where: {
+            role:{
+              [Op.in]:[3,5]
+            }
+          },
+          attributes:["id","first_name","last_name","role"]
+        })
+
+        let massage =  (result.length>0)?Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: result
+            })
+
+  }
+  catch (err) {
+
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.SOMETHING_WENT_WRONG,
+      data: null
+    })
+
+  }
+
+}
 module.exports = admin;
