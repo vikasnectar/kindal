@@ -515,4 +515,82 @@ admin.getAllUsers = async function (req, res) {
   }
 
 }
+
+admin.getUserById =  async (req,res)=>{
+  try {
+    let {userId} = req.body;
+    let result = await user.findAll({
+      where: {
+        id:userId
+      },
+      attributes:["id","first_name","last_name","role","email","gendar"]
+    })
+
+    let massage =  (result.length>0)?Constant.USER_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+        return res.json({
+            code: Constant.SUCCESS_CODE,
+            massage: massage,
+            data: result
+        })
+
+}
+catch (err) {
+
+return res.json({
+  code: Constant.ERROR_CODE,
+  massage: Constant.SOMETHING_WENT_WRONG,
+  data: null
+})
+
+}
+
+}
+
+admin.deleteUser = async (req,res)=>{
+  try {
+
+    let { id } = req.body;
+
+    user.findOne({
+        where: {
+            id: id
+        }
+    }).then(async (result) => {
+        if (result) {
+            let userData = {
+                status: 0
+
+            }
+            result.update(userData)
+
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: Constant.USER_DELETED_SUCCESS,
+                data: result
+            })
+
+        } else {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: result
+            })
+        }
+
+    }).catch(error => {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    })
+
+} catch (error) {
+    return res.json({
+        code: Constant.ERROR_CODE,
+        massage: Constant.SOMETHING_WENT_WRONG,
+        data: error
+    })
+}
+}
 module.exports = admin;
