@@ -15,8 +15,8 @@ let books ={};
 books.addBookCategory = async (req, res) => {
     try {
 
-        let { name, name_en, description, description_en } = req.body;
-
+        let { name, name_en, description, description_en ,image} = req.body;
+        let cover_img = "";
         let blogData = {
             name: name,
             name_en: name_en,
@@ -26,6 +26,17 @@ books.addBookCategory = async (req, res) => {
 
         let result = await book_category.create(blogData);
         if (result) {
+
+            if (image) {
+                cover_img = await utility.uploadBase64Image(image)
+            
+             let userData = {
+                cover_img: cover_img
+    
+                }
+                result.update(userData)
+            }
+
             let data = await book_category.findAll({
                 where:{
                     status:true

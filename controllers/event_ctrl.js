@@ -4,7 +4,6 @@ const config = require('../config');
 const utility = require('../helpers/utility');
 const db = require("../models");
 const Constant = require('../config/constant');
-const blog = db.blog;
 const event = db.event;
 const admin = db.admin;
 const event_category= db.event_category;
@@ -15,12 +14,9 @@ let events = {};
 
 events.add = async (req, res) => {
     try {
-        let { name, name_en, date, time, description, description_en ,category_id } = req.body;
+        let { name, name_en, date, time, description, description_en ,category_id,image } = req.body;
         let { userId } = req.user;
         let fileName = '';
-        if (req.files) {
-            fileName = await utility.fileupload(req.files)
-        }
         let slug = await utility.generateSlug(name,event);
 
         let eventData = {
@@ -38,9 +34,26 @@ events.add = async (req, res) => {
         }
         let result = await event.create(eventData);
         if (result) {
+
+            if (image) {
+                fileName = await utility.uploadBase64Image(image)
+            
+             let userData = {
+                    image: fileName
+    
+                }
+                result.update(userData)
+            }
+
             let data = await event.findAll({where:{
                 status:true
-                }})
+            },
+            include: [{
+                model:event_category,
+                where:{
+                    status:true
+                },
+            }]})
 
             return res.json({
                 code: Constant.SUCCESS_CODE,
