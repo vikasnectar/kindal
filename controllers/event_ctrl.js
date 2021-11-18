@@ -312,12 +312,12 @@ events.getEventsByCategoryname = async (req, res) => {
 events.getEventsByCategoryId = async (req, res) => {
     try {
         let { id } = req.body;
-        event_category.findAll({
+        event.findAll({
             where: {
-                id: id
+                category_id: id
             },
             include: [{
-                model:event
+                model:event_category
             }]
 
         }).then(result => {
