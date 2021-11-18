@@ -26,7 +26,11 @@ books.addBookCategory = async (req, res) => {
 
         let result = await book_category.create(blogData);
         if (result) {
-            let data = await book_category.findAll({})
+            let data = await book_category.findAll({
+                where:{
+                    status:true
+                }
+            })
 
             return res.json({
                 code: Constant.SUCCESS_CODE,
@@ -338,7 +342,10 @@ books.getBooks = async (req, res) => {
                     status: true
                 },
                 include: [{
-                    model:book_category
+                    model:book_category,
+                    where:{
+                        status:true
+                    }
                 }]
             })
             let massage =  (data.length>0)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
@@ -424,7 +431,10 @@ books.getBooksByCategory = async (req, res) => {
 
                 },
                 include: [{
-                    model:book
+                    model:book,
+                    where:{
+                        status:true
+                    }
                 }]
             })
             let massage =  (data)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
@@ -451,7 +461,10 @@ books.getBooksBytag = async (req, res) => {
                     name: slug
                 },
                 include: [{
-                    model:book
+                    model:book,
+                    where:{
+                        status:true
+                    }
                 }]
             })
             let massage =  (data)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND

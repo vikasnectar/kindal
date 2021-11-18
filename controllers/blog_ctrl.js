@@ -190,7 +190,11 @@ blogs.addBlogCategory = async (req, res) => {
 
         let result = await blog_category.create(blogData);
         if (result) {
-            let data = await blog_category.findAll({})
+            let data = await blog_category.findAll({
+                where :{
+                    status:true
+                }
+            })
 
             return res.json({
                 code: Constant.SUCCESS_CODE,
@@ -318,10 +322,16 @@ blogs.deleteBlogCategory = async (req, res) => {
 blogs.getAllBlogs = async (req, res) => {
     try {
         blog.findAll({
+            where:{
+                status:true
+            },
             include: [{
                 model:blog_category,
                 attributes:["id","name","name_en","description",
-                "description_en"]
+                "description_en"],
+                where:{
+                    status:true
+                }
             }]
         }).then(result => {
 
@@ -354,12 +364,16 @@ blogs.getBlogsByUser = async (req, res) => {
         let {userId} = req.user;
         blog.findAll({
             where:{
-             userId :userId
+             userId :userId,
+             status:true
             },
             include: [{
                 model:blog_category,
                 attributes:["id","name","name_en","description",
-                "description_en"]
+                "description_en"],
+                where:{
+                    status:true
+                }
             }]
         }).then(result => {
 
@@ -417,10 +431,14 @@ blogs.getBlogBySlug = async (req, res) => {
         let { slug } = req.body;
         blog.findOne({
             where: {
-                slug: slug
+                slug: slug,
+                status:true
             },
             include: [{
                 model:blog_category,
+                where: {
+                    status:true
+                },
                 attributes:["id","name","name_en","description",
                 "description_en"]
             },{
@@ -430,7 +448,7 @@ blogs.getBlogBySlug = async (req, res) => {
             }]
         }).then(result => {
 
-            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage =  (result)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -465,7 +483,8 @@ blogs.getBlogsByCategoryname = async (req, res) => {
                     {
                         name_en: name
                     }
-                ]
+                ],
+                status:true
             },
             include: [blog]
 
@@ -499,10 +518,14 @@ blogs.getBlogsByCategoryId = async (req, res) => {
         let { id } = req.body;
         blog_category.findAll({
             where: {
-                id: id
+                id: id,
+                status:true
             },
             include: [{
-                    model:blog
+                    model:blog,
+                    where:{
+                        status:true
+                    }
                 }]
 
         }).then(result => {
@@ -532,7 +555,11 @@ blogs.getBlogsByCategoryId = async (req, res) => {
 
 blogs.getAllBlogsCategory = async (req, res) => {
     try {
-        blog_category.findAll().then(result => {
+        blog_category.findAll({
+            where:{
+                status:true
+            }
+        }).then(result => {
 
             let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
