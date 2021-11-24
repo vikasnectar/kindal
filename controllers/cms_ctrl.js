@@ -8,10 +8,14 @@ const utility = require('../helpers/utility')
 let cmsfunc ={};
 cmsfunc.add = async (req,res)=>{
     try {
-        let {title , image,} = req.body; 
+        let {title , image,link,subtitle,description} = req.body; 
         let cmsData = {
-            title:title
+            title:title,
+            link:link,
+            subtitle:subtitle,
+            description:description
         }
+        
         let result = await cms.create(cmsData);
         if (image) {
             image = await utility.uploadBase64Image(image)
@@ -39,9 +43,12 @@ cmsfunc.add = async (req,res)=>{
 
 cmsfunc.edit = async (req,res)=>{
     try {
-        let {title , image,id} = req.body; 
+        let {title , image,id,link,subtitle,description} = req.body; 
         let cmsData = {
-            title:title
+            title:title,
+            link:link,
+            subtitle:subtitle,
+            description:description
         }
         cms.findOne({
             where: {
@@ -53,7 +60,10 @@ cmsfunc.edit = async (req,res)=>{
             
              let cmsData = {
                 image: image,
-                title:title
+                title:title,
+                link:link,
+                subtitle:subtitle,
+                description:description
                 }
                 result.update(cmsData)
             }else{
@@ -134,4 +144,104 @@ cmsfunc.deletecms = async (req,res)=>{
   }
   }
 
+
+  cmsfunc.getAllCms = async (req,res)=>{
+    try {
+  
+      cms.findAll({
+          where: {
+            status:true
+          }
+      }).then(async (result) => {
+        return res.json({
+            code: Constant.SUCCESS_CODE,
+            massage: Constant.SLIDE_RETRIEVE_SUCCESS,
+            data: result
+        })
+  
+      }).catch(error => {
+          return res.json({
+              code: Constant.ERROR_CODE,
+              massage: Constant.SOMETHING_WENT_WRONG,
+              data: error
+          })
+      })
+  
+  } catch (error) {
+      return res.json({
+          code: Constant.ERROR_CODE,
+          massage: Constant.SOMETHING_WENT_WRONG,
+          data: error
+      })
+  }
+  }
+
+  cmsfunc.getAllAprovedCms = async (req,res)=>{
+    try {
+  
+      cms.findAll({
+          where: {
+            status:true,
+            approved:true
+          }
+      }).then(async (result) => {
+        return res.json({
+            code: Constant.SUCCESS_CODE,
+            massage: Constant.SLIDE_RETRIEVE_SUCCESS,
+            data: result
+        })
+  
+      }).catch(error => {
+          return res.json({
+              code: Constant.ERROR_CODE,
+              massage: Constant.SOMETHING_WENT_WRONG,
+              data: error
+          })
+      })
+  
+  } catch (error) {
+      return res.json({
+          code: Constant.ERROR_CODE,
+          massage: Constant.SOMETHING_WENT_WRONG,
+          data: error
+      })
+  }
+  }
+
+
+  cmsfunc.cmsAprovedStatus = async (req,res)=>{
+    try {
+        let {id,approved} = req.body; 
+        cms.findOne({
+            where: {
+              id:id
+            }
+          }).then(async (result) => {
+            
+            let cmsData = {
+                approved:approved
+            }
+            result.update(cmsData)
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: Constant.SLIDE_UPDATE_SUCCESS,
+                data: result
+              })
+          }).catch(error =>{
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: null
+              })
+          })
+        
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: null
+          })      
+    }
+    
+}
   module.exports = cmsfunc;

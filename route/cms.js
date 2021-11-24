@@ -9,4 +9,10 @@ router.put('/edit',middileware.checkAuthentication,cms.edit)
 
 router.delete('/delete',middileware.checkAuthentication,cms.deletecms)
 
+router.get('/',cms.getAllAprovedCms)
+
+router.get('/getAllCms',middileware.checkAuthentication,cms.getAllCms)
+
+router.put('/cmsAprovedStatus',middileware.checkAuthentication,cms.cmsAprovedStatus)
+
 module.exports = router

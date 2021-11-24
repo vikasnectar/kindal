@@ -56,5 +56,6 @@ module.exports = {
     SLIDE_SAVE_SUCCESS:'Slide Saved successfully',
     SLIDE_DELETED_SUCCESS: 'Slide deleted successfully',
     SLIDE_UPDATE_SUCCESS:'Slide update successfully',
+    SLIDE_RETRIEVE_SUCCESS:'Slide retrieve successfully',
 
 }

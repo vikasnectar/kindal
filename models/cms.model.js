@@ -6,10 +6,24 @@ module.exports = (sequelize, Sequelize) => {
         image: {
             type: Sequelize.STRING
         },
+        link: {
+            type: Sequelize.STRING
+        },
+        subtitle: {
+            type: Sequelize.STRING
+        },
+        description: {
+            type: Sequelize.STRING
+        },
         status: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
             defaultValue: true
+        },
+        approved: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         }
     }, {
         timestamps: true
