@@ -22,6 +22,7 @@ db.admin = require("./user.model.js")(sequelize, Sequelize);
 db.blog = require("./blog.model.js")(sequelize, Sequelize);
 db.blog_category = require("./blog_category.model.js")(sequelize, Sequelize);
 db.blog_comment = require("./blog.comment.model.js")(sequelize, Sequelize);
+db.cms = require("./cms.model.js")(sequelize, Sequelize);
 db.event = require("./event.model.js")(sequelize, Sequelize);
 db.event_category = require("./event_category.model.js")(sequelize, Sequelize);
 

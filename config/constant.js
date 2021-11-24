@@ -53,5 +53,8 @@ module.exports = {
     STORE_SAVE_SUCCESS: 'Store Saved successfully',
     STORE_DELETED_SUCCESS: 'Store deleted successfully',
     CONSIGNEE_RETRIEVE_SUCCESS:"Consignee retrieve successfully",
+    SLIDE_SAVE_SUCCESS:'Slide Saved successfully',
+    SLIDE_DELETED_SUCCESS: 'Slide deleted successfully',
+    SLIDE_UPDATE_SUCCESS:'Slide update successfully',
 
 }

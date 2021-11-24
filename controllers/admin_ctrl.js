@@ -18,7 +18,8 @@ let admin = {};
 admin.userRegistration = async function (req, res) {
 
   try {
-
+    let {image} =req.body;
+    let profile_img = "";
     let userData = await validation.checkUserData(req.body)
     if (userData.message) {
       return res.json({
@@ -44,6 +45,17 @@ admin.userRegistration = async function (req, res) {
 
         userData.password = bcrypt.hashSync(userData.password, salt);
         let result = await user.create(userData);
+
+        if (image) {
+          profile_img = await utility.uploadBase64Image(image)
+      
+       let userData = {
+          profile_img: profile_img
+
+          }
+          result.update(userData)
+      }
+
         let mailOptions = {
           from: 'vikas <vikas.kushwah@nectarinfotel.com>',
           to: userData.email,
@@ -124,7 +136,8 @@ admin.userLogin = async (req, res) => {
           role:result.role,
           city: result.city,
           phone: result.phone,
-          dob_date: result.dob_date
+          dob_date: result.dob_date,
+          profile_img: result.profile_img
         }
         params.jwtToken = jwt.sign(params, process.env.SECRET);
         return res.json({
@@ -336,16 +349,27 @@ admin.changePassword = async (req, res) => {
 admin.updateProfile = async (req, res) => {
   try {
     let {userId} =  req.user;
-
+    let {image} = req.body; 
+    let profile_img = "";
     user.findOne({
       where: {
         id:userId
       }
-    }).then((result) => {
+    }).then(async (result) => {
       if (result) {
 
         result.update(req.body);
         
+        if (image) {
+          profile_img = await utility.uploadBase64Image(image)
+      
+       let userData = {
+          profile_img: profile_img
+
+          }
+          result.update(userData)
+      }
+
         return res.json({
           code: Constant.SUCCESS_CODE,
           massage: Constant.USER_DATA_UPDATE_SUCCESS,

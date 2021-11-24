@@ -143,6 +143,7 @@ utility.uploadBase64Image = (imgBase64)=>{
     
         
         var base64Data = imgBase64.replace(/^data:image\/png;base64,/, "");
+        base64Data = imgBase64.replace(/^data:image\/jpeg;base64,/, "");
         fs.writeFile(file_path+"/"+filename, base64Data, 'base64', function(err) {
         if(err){
             reject(filename);

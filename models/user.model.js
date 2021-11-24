@@ -38,6 +38,9 @@ module.exports = (sequelize, Sequelize) => {
     resetPasswordExpires: {
       type: Sequelize.STRING
     },
+    profile_img: {
+      type: Sequelize.STRING
+    },
     status: {
       type: Sequelize.BOOLEAN,
       allowNull: false, 
