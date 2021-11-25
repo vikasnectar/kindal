@@ -353,10 +353,7 @@ books.getBooks = async (req, res) => {
                     status: true
                 },
                 include: [{
-                    model:book_category,
-                    where:{
-                        status:true
-                    }
+                    model:book_category
                 }]
             })
             let massage =  (data.length>0)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND

@@ -1,30 +1,22 @@
 const db = require("../models");
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
-const cms = db.cms;
+const faq = db.faq;
 const Op = db.Sequelize.Op;
 const Constant = require('../config/constant')
 const utility = require('../helpers/utility')
-let cmsfunc ={};
-cmsfunc.add = async (req,res)=>{
+
+let faqs ={};
+
+faqs.add = async (req,res)=>{
     try {
-        let {title , image,link,subtitle,description} = req.body; 
-        let cmsData = {
-            title:title,
-            link:link,
-            subtitle:subtitle,
-            description:description
+        let {question,answer} = req.body; 
+        let faqData = {
+            question:question,
+            answer:answer
         }
         
-        let result = await cms.create(cmsData);
-        if (image) {
-            image = await utility.uploadBase64Image(image)
-        
-         let userData = {
-            image: image  
-            }
-            result.update(userData)
-        }
+        let result = await faq.create(faqData);
         return res.json({
             code: Constant.SUCCESS_CODE,
             massage: Constant.SLIDE_SAVE_SUCCESS,
@@ -41,40 +33,20 @@ cmsfunc.add = async (req,res)=>{
 }
 
 
-cmsfunc.edit = async (req,res)=>{
+faqs.edit = async (req,res)=>{
     try {
-        let {title , image,id,link,subtitle,description} = req.body; 
-        let cmsData = {
-            title:title,
-            link:link,
-            subtitle:subtitle,
-            description:description
-        }
-        cms.findOne({
+        let {answer,id,question} = req.body; 
+       
+        faq.findOne({
             where: {
               id:id
             }
           }).then(async (result) => {
-            if (image) {
-                image = await utility.uploadBase64Image(image)
-            
-             let cmsData = {
-                image: image,
-                title:title,
-                link:link,
-                subtitle:subtitle,
-                description:description
-                }
-                result.update(cmsData)
-            }else{
-                let cmsData = {
-                    title:title,
-                    link:link,
-                    subtitle:subtitle,
-                    description:description
-                }
-                result.update(cmsData)  
+            let faqData = {
+                answer:answer,
+                question:question
             }
+            result.update(faqData)  
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: Constant.SLIDE_SAVE_SUCCESS,
@@ -99,22 +71,22 @@ cmsfunc.edit = async (req,res)=>{
 }
 
 
-cmsfunc.deletecms = async (req,res)=>{
+faqs.delete = async (req,res)=>{
     try {
   
       let { id } = req.body;
   
-      cms.findOne({
+      faq.findOne({
           where: {
               id: id
           }
       }).then(async (result) => {
           if (result) {
-              let cmsData = {
+              let faqData = {
                   status: 0
   
               }
-              result.update(cmsData)
+              result.update(faqData)
   
               return res.json({
                   code: Constant.SUCCESS_CODE,
@@ -148,10 +120,10 @@ cmsfunc.deletecms = async (req,res)=>{
   }
 
 
-  cmsfunc.getAllCms = async (req,res)=>{
+  faqs.getAllFaq = async (req,res)=>{
     try {
   
-      cms.findAll({
+        faq.findAll({
           where: {
             status:true
           }
@@ -179,10 +151,10 @@ cmsfunc.deletecms = async (req,res)=>{
   }
   }
 
-  cmsfunc.getAllAprovedCms = async (req,res)=>{
+  faqs.getAllAprovedfaq = async (req,res)=>{
     try {
   
-      cms.findAll({
+        faq.findAll({
           where: {
             status:true,
             approved:true
@@ -212,10 +184,10 @@ cmsfunc.deletecms = async (req,res)=>{
   }
 
 
-  cmsfunc.cmsAprovedStatus = async (req,res)=>{
+  faqs.AprovedStatus = async (req,res)=>{
     try {
         let {id,approved} = req.body; 
-        cms.findOne({
+        faq.findOne({
             where: {
               id:id
             }
@@ -247,4 +219,4 @@ cmsfunc.deletecms = async (req,res)=>{
     }
     
 }
-  module.exports = cmsfunc;
+  module.exports = faqs;
