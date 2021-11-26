@@ -8,6 +8,7 @@ const book_category = db.book_category;
 const { Op,sequelize } = require("sequelize");
 const book = db.books;
 const book_tag = db.book_tag;
+const book_comment = db.book_comment;
 const tag_relationship =  db.tag_relationship;
 
 let books ={};
@@ -491,4 +492,40 @@ books.getBooksBytag = async (req, res) => {
 
 }
 
+
+
+books.addBookComment = async (req, res) => {
+    try {
+
+        let { name, email, comment, book_id } = req.body;
+        let bookCommentData = {
+            name: name,
+            email: email,
+            comment: comment,
+            book_id: book_id
+        }
+
+        let result = await book_comment.create(bookCommentData);
+        if (result) {
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: Constant.BOOK_COMMENT_SAVE_SUCCESS,
+                data: result
+            })
+        } else {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: result
+            })
+        }
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
 module.exports = books;

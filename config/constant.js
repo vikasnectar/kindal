@@ -50,6 +50,7 @@ module.exports = {
     BOOK_CATEGORY_RETRIEVE_SUCCESS:'Book category retrieve successfully',
     BOOK_TAGS_RETRIEVE_SUCCESS:'Book tag retrieve successfully',
     BOOK_RETRIEVE_SUCCESS:'Book retrieve successfully',
+    BOOK_COMMENT_SAVE_SUCCESS: 'Book comment created successfully',
     STORE_SAVE_SUCCESS: 'Store Saved successfully',
     STORE_DELETED_SUCCESS: 'Store deleted successfully',
     CONSIGNEE_RETRIEVE_SUCCESS:"Consignee retrieve successfully",
@@ -61,5 +62,6 @@ module.exports = {
     WISHLIST_RETRIEVE_SUCCESS: 'Wishlist already exists',
     WISHLIST_SAVE_SUCCESS: 'Wishlist Saved successfully',
     DATA_DELETED_SUCCESS: 'Data deleted successfully',
+    
 
 }
