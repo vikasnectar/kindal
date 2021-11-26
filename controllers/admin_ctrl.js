@@ -349,7 +349,7 @@ admin.changePassword = async (req, res) => {
 admin.updateProfile = async (req, res) => {
   try {
     let {userId} =  req.user;
-    let {image} = req.body; 
+    let {image,gendar,last_name,phone,first_name,city,dob_date} = req.body; 
     let profile_img = "";
     user.findOne({
       where: {
@@ -357,8 +357,15 @@ admin.updateProfile = async (req, res) => {
       }
     }).then(async (result) => {
       if (result) {
-
-        result.update(req.body);
+        let userData = {
+          gendar:gendar,
+          last_name:last_name,
+          phone:phone,
+          first_name:first_name,
+          city:city,
+          dob_date:dob_date
+        }
+        result.update(userData);
         
         if (image) {
           profile_img = await utility.uploadBase64Image(image)
@@ -373,7 +380,7 @@ admin.updateProfile = async (req, res) => {
         return res.json({
           code: Constant.SUCCESS_CODE,
           massage: Constant.USER_DATA_UPDATE_SUCCESS,
-          data: null
+          data: result
         });
 
       } else {

@@ -57,5 +57,9 @@ module.exports = {
     SLIDE_DELETED_SUCCESS: 'Slide deleted successfully',
     SLIDE_UPDATE_SUCCESS:'Slide update successfully',
     SLIDE_RETRIEVE_SUCCESS:'Slide retrieve successfully',
+    BOOK_ALREADY_EXIST: 'Book already exists',
+    WISHLIST_RETRIEVE_SUCCESS: 'Wishlist already exists',
+    WISHLIST_SAVE_SUCCESS: 'Wishlist Saved successfully',
+    DATA_DELETED_SUCCESS: 'Data deleted successfully',
 
 }

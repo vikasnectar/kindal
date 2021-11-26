@@ -43,6 +43,8 @@ var event = require('./route/event')
 var store = require('./route/store')
 var faq = require('./route/faq')
 var cms = require('./route/cms')
+var wishlist = require('./route/wishlist')
+
 
 // user route file
 app.use('/admin', admin)
@@ -52,6 +54,7 @@ app.use('/event', event)
 app.use('/store', store)
 app.use('/cms', cms)
 app.use('/faq', faq)
+app.use('/wishlist', wishlist)
 
 // Handling non matching request from the client
 app.use((req, res, next) => {
