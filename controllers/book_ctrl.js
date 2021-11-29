@@ -217,12 +217,46 @@ books.getAllTags = async (req, res) => {
 books.add = async (req,res)=>{
 
         try {
-            let {tag} = req.body;
+            let {name,name_en,category_id ,price,description,description_en,publication,author,item_condition,item_condition_en,size,price_type,edition_year,page_count,publush_rights,min_age,max_age,tag} = req.body;
+            let {userId} = req.user;
+            let slug = await utility.generateSlug(name,book);
+
+            let BookData = {
+                name:name,
+                name_en:name_en,
+                category_id:category_id,
+                price:price,
+                userId:userId,
+                description:description,
+                description_en:description_en,
+                publication:publication,
+                author:author,
+                item_condition:item_condition,
+                item_condition_en:item_condition_en,size:size,
+                price_type:price_type,
+                edition_year:edition_year,
+                page_count:page_count,
+                publush_rights:publush_rights,
+                min_age:min_age,
+                slug:slug,
+                max_age:max_age 
+            }
             book.create(req.body).then( async result =>{
 
                 if(tag){
                     let data = await utility.checkTagAndCreate(tag,result.id,book_tag,tag_relationship);
                 }
+
+                if (image) {
+                    fileName = await utility.uploadBase64Image(image)
+                
+                 let userData = {
+                    cover_img: fileName
+        
+                    }
+                    result.update(userData)
+                }
+
                 return res.json({
                     code: Constant.SUCCESS_CODE,
                     massage: Constant.BOOK_CATEGORY_SAVE_SUCCESS,
@@ -250,7 +284,7 @@ books.add = async (req,res)=>{
 books.edit = async (req, res) => {
     try {
 
-        let { id,tag } = req.body;
+        let { id,name,name_en,category_id ,price,description,description_en,publication,author,item_condition,item_condition_en,size,price_type,edition_year,page_count,publush_rights,min_age,max_age,tag } = req.body;
         book.findOne({
             where: {
                 id: id
@@ -262,8 +296,39 @@ books.edit = async (req, res) => {
                     let data = await utility.checkTagAndCreate(tag,result.id,book_tag,tag_relationship);
                 }
 
-                result.update(req.body)
+                let BookData = {
+                    name:name,
+                    name_en:name_en,
+                    category_id:category_id,
+                    price:price,
+                    userId:userId,
+                    description:description,
+                    description_en:description_en,
+                    publication:publication,
+                    author:author,
+                    item_condition:item_condition,
+                    item_condition_en:item_condition_en,size:size,
+                    price_type:price_type,
+                    edition_year:edition_year,
+                    page_count:page_count,
+                    publush_rights:publush_rights,
+                    min_age:min_age,
+                    slug:slug,
+                    max_age:max_age 
+                }
 
+                result.update(BookData)
+
+                if (image) {
+                    fileName = await utility.uploadBase64Image(image)
+                
+                 let userData = {
+                        image: fileName
+        
+                    }
+                    result.update(userData)
+                }
+                
                 return res.json({
                     code: Constant.SUCCESS_CODE,
                     massage: Constant.BOOK_CATEGORY_UPDATED_SUCCESS,
