@@ -241,7 +241,7 @@ books.add = async (req,res)=>{
                 slug:slug,
                 max_age:max_age 
             }
-            book.create(req.body).then( async result =>{
+            book.create(BookData).then( async result =>{
 
                 if(tag){
                     let data = await utility.checkTagAndCreate(tag,result.id,book_tag,tag_relationship);
