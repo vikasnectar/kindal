@@ -27,7 +27,7 @@ db.faq = require("./faq.model.js")(sequelize, Sequelize);
 db.wishlist = require("./wishlist.model.js")(sequelize, Sequelize);
 db.event = require("./event.model.js")(sequelize, Sequelize);
 db.event_category = require("./event_category.model.js")(sequelize, Sequelize);
-db.book_comment = require("./book_comment.model.js")(sequelize, Sequelize);
+
 
 
 
@@ -37,6 +37,9 @@ db.book_tag =  require('./book_tag.model.js')(sequelize,Sequelize)
 db.tag_relationship =  require('./book_tag_relationship.model.js')(sequelize,Sequelize)
 db.books_transactions =  require('./books_transactions.model.js')(sequelize,Sequelize)
 db.store =  require('./store.model.js')(sequelize,Sequelize)
+db.book_comment = require("./book_comment.model.js")(sequelize, Sequelize);
+
+
 
 
 
@@ -57,8 +60,6 @@ db.book_tag.belongsToMany(db.books, {
   through: "book_tag_relationships",
   foreignKey: "tagId",
 });
-
-
 
 db.admin.hasMany(db.books,{
   foreignKey: "userId"
@@ -94,5 +95,10 @@ db.blog.hasMany(db.blog_comment, {
 db.blog_comment.belongsTo(db.blog, {
   foreignKey: "blog_id"
 })
+
+
+
+
+
 
 module.exports = db;

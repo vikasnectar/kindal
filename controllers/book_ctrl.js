@@ -528,4 +528,60 @@ books.addBookComment = async (req, res) => {
     }
 
 }
+
+
+books.getBookBySlug = async (req, res) => {
+    try {
+        let { slug } = req.body;
+        book.findOne({
+            where: {
+                slug: slug,
+                status:true
+            },
+            include: [{
+                model:book_category,
+                where: {
+                    status:true
+                },
+                attributes:["id","name","name_en","description",
+                "description_en"]
+            },{
+                model:book_tag,
+
+            }]
+        }).then(async (result) => {
+
+            let massage =  (result)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+
+            let book_comments = await  book_comment.findAll({
+                where:{
+                    book_id:result.id
+                }
+            });
+            let data = {
+                result:result,
+                book_comments:book_comments
+            }
+            result.book_comments = [];
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
 module.exports = books;
