@@ -217,7 +217,7 @@ books.getAllTags = async (req, res) => {
 books.add = async (req,res)=>{
 
         try {
-            let {name,name_en,category_id ,price,description,description_en,publication,author,item_condition,item_condition_en,size,price_type,edition_year,page_count,publush_rights,min_age,max_age,tag} = req.body;
+            let {name,name_en,category_id ,price,description,description_en,publication,author,item_condition,item_condition_en,size,price_type,edition_year,page_count,publush_rights,min_age,max_age,tag,cover_img} = req.body;
             let {userId} = req.user;
             let slug = await utility.generateSlug(name,book);
 
@@ -247,11 +247,11 @@ books.add = async (req,res)=>{
                     let data = await utility.checkTagAndCreate(tag,result.id,book_tag,tag_relationship);
                 }
 
-                if (image) {
-                    fileName = await utility.uploadBase64Image(image)
+                if (cover_img) {
+                    cover_img = await utility.uploadBase64Image(cover_img)
                 
                  let userData = {
-                    cover_img: fileName
+                    cover_img: cover_img
         
                     }
                     result.update(userData)
@@ -284,7 +284,7 @@ books.add = async (req,res)=>{
 books.edit = async (req, res) => {
     try {
 
-        let { id,name,name_en,category_id ,price,description,description_en,publication,author,item_condition,item_condition_en,size,price_type,edition_year,page_count,publush_rights,min_age,max_age,tag } = req.body;
+        let { id,name,name_en,category_id ,price,description,description_en,publication,author,item_condition,item_condition_en,size,price_type,edition_year,page_count,publush_rights,min_age,max_age,tag,cover_img} = req.body;
         book.findOne({
             where: {
                 id: id
@@ -319,16 +319,16 @@ books.edit = async (req, res) => {
 
                 result.update(BookData)
 
-                if (image) {
-                    fileName = await utility.uploadBase64Image(image)
+                if (cover_img) {
+                    cover_img = await utility.uploadBase64Image(cover_img)
                 
                  let userData = {
-                        image: fileName
+                    cover_img: cover_img
         
                     }
                     result.update(userData)
                 }
-                
+
                 return res.json({
                     code: Constant.SUCCESS_CODE,
                     massage: Constant.BOOK_CATEGORY_UPDATED_SUCCESS,
