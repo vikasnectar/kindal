@@ -617,17 +617,19 @@ books.getBookBySlug = async (req, res) => {
         }).then(async (result) => {
 
             let massage =  (result)?Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
-
-            let book_comments = await  book_comment.findAll({
-                where:{
-                    book_id:result.id
+            let data = null;
+            if(result){
+                let book_comments = await  book_comment.findAll({
+                    where:{
+                        book_id:result.id
+                    }
+                });
+                data = {
+                    result:result,
+                    book_comments:book_comments
                 }
-            });
-            let data = {
-                result:result,
-                book_comments:book_comments
             }
-            result.book_comments = [];
+            
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,

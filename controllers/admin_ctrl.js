@@ -92,10 +92,32 @@ admin.getUserByToken = async(req,res)=>{
       const SECRET = process.env.SECRET;
       const { authorization } = req.headers;
       const decoded = jwt.verify(authorization, SECRET);
+      let result="";
+      if(decoded){
+         result = await user.findOne({
+          where: {
+            id: decoded.userId
+          }
+        })
+
+        result = {
+          userId: result.id,
+          first_name: result.first_name,
+          last_name: result.last_name,
+          email: result.email,
+          gendar: result.gendar,
+          role:result.role,
+          city: result.city,
+          phone: result.phone,
+          dob_date: result.dob_date,
+          profile_img: result.profile_img
+        }
+      }
+      
       return res.json({
           code: Constant.SUCCESS_CODE,
           massage: Constant.USER_VERIFICATION_SUCCESS,
-          data: decoded
+          data: result
         })
   } catch (error) {
       return res.json({
