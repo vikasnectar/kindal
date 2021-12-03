@@ -137,17 +137,16 @@ utility.uploadBase64Image = (imgBase64)=>{
 
     return new Promise( async(resolve, reject) => {
         let name = await utility.randomString(12);
-        let filename = 'img_'+ name +'.png';
+        let mimeType = imgBase64.match(/[^:/]\w+(?=;|,)/)[0];
+        let filename = 'img_'+ name +'.'+mimeType;
         var currentPath = process.cwd();
         var file_path = path.join(currentPath, '/public/images');
     
         
-        var base64Data = imgBase64.replace(/^data:image\/png;base64,/, "");
-        base64Data = imgBase64.replace(/^data:image\/jpeg;base64,/, "");
-        base64Data = imgBase64.replace(/^data:image\/PNG;base64,/, "");
-        base64Data = imgBase64.replace(/^data:image\/png;base64,/, "");
+       // Remove header
+	let base64Image = imgBase64.split(';base64,').pop();
 
-        fs.writeFile(file_path+"/"+filename, base64Data, 'base64', function(err) {
+        fs.writeFile(file_path+"/"+filename, base64Image , 'base64', function(err) {
         if(err){
             reject(filename);
         }
@@ -157,4 +156,6 @@ utility.uploadBase64Image = (imgBase64)=>{
     })
    
 }
+
+
 module.exports = utility;

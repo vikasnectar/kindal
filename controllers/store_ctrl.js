@@ -296,4 +296,54 @@ stores.getTransactionDetails = async (req, res) => {
 
 }
 
+
+stores.AprovedStore = async (req, res) => {
+    try {
+
+        let { id , status} = req.body;
+
+        store.findOne({
+            where: {
+                id: id
+            }
+        }).then(async (result) => {
+            if (result) {
+                let storeData = {
+                    status: status
+
+                }
+                result.update(storeData)
+
+                return res.json({
+                    code: Constant.SUCCESS_CODE,
+                    massage: Constant.STORE_STATUS_UPDATE_SUCCESS,
+                    data: result
+                })
+
+            } else {
+                return res.json({
+                    code: Constant.ERROR_CODE,
+                    massage: Constant.SOMETHING_WENT_WRONG,
+                    data: result
+                })
+            }
+
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
 module.exports = stores;

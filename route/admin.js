@@ -29,6 +29,7 @@ router.post('/getAllUsers',middileware.checkAuthentication,admin.getAllUsers);
 
 router.post('/addStore',middileware.checkAuthentication,store.addStore);
 router.delete('/deleteStore',middileware.checkAuthentication,store.deleteStore);
+router.post('/AprovedStore',middileware.checkAuthentication,store.AprovedStore);
 router.delete('/deleteUser', admin.deleteUser);
 
 

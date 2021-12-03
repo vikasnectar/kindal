@@ -53,6 +53,7 @@ module.exports = {
     BOOK_COMMENT_SAVE_SUCCESS: 'Book comment created successfully',
     STORE_SAVE_SUCCESS: 'Store Saved successfully',
     STORE_DELETED_SUCCESS: 'Store deleted successfully',
+    STORE_STATUS_UPDATE_SUCCESS: 'Store ststus update successfully',
     CONSIGNEE_RETRIEVE_SUCCESS:"Consignee retrieve successfully",
     SLIDE_SAVE_SUCCESS:'Slide Saved successfully',
     SLIDE_DELETED_SUCCESS: 'Slide deleted successfully',
