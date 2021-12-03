@@ -309,7 +309,7 @@ stores.AprovedStore = async (req, res) => {
         }).then(async (result) => {
             if (result) {
                 let storeData = {
-                    status: status
+                    approved: status
 
                 }
                 result.update(storeData)

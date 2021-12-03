@@ -21,6 +21,11 @@ module.exports = (sequelize, Sequelize) => {
       description_en: {
         type: Sequelize.TEXT
       },
+      approved: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    },
       status: {
         type: Sequelize.BOOLEAN,
         allowNull: false, 
