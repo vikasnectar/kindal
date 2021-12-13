@@ -5,23 +5,23 @@ const Constant = require('../config/constant');
 const blog = db.blog;
 const blog_category = db.blog_category;
 const blog_comment = db.blog_comment;
-const { Op,sequelize } = require("sequelize");
+const { Op, sequelize } = require("sequelize");
 let blogs = {};
 
 
 blogs.add = async (req, res) => {
     try {
 
-        let { title, title_en, category_id, url, date, time, description, description_en,image } = req.body;
+        let { title, title_en, category_id, url, date, time, description, description_en, image } = req.body;
         let { userId } = req.user;
         let fileName = '';
-        let slug = await utility.generateSlug(title,blog);
+        let slug = await utility.generateSlug(title, blog);
         let blogData = {
             title: title,
             title_en: title_en,
             category_id: category_id,
             userId: userId,
-            slug:slug,
+            slug: slug,
             url: url,
             date: date,
             time: time,
@@ -32,16 +32,16 @@ blogs.add = async (req, res) => {
 
         let result = await blog.create(blogData);
         if (result) {
-            
-	    if (image) {
-            fileName = await utility.uploadBase64Image(image)
-		
-	     let userData = {
-                image: fileName
 
+            if (image) {
+                fileName = await utility.uploadBase64Image(image)
+
+                let userData = {
+                    image: fileName
+
+                }
+                result.update(userData)
             }
-            result.update(userData)
-        }
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: Constant.BLOG_SAVE_SUCCESS,
@@ -130,7 +130,7 @@ blogs.delete = async (req, res) => {
     try {
 
         let { id } = req.body;
-        
+
         blog.findOne({
             where: {
                 id: id
@@ -191,8 +191,8 @@ blogs.addBlogCategory = async (req, res) => {
         let result = await blog_category.create(blogData);
         if (result) {
             let data = await blog_category.findAll({
-                where :{
-                    status:true
+                where: {
+                    status: true
                 }
             })
 
@@ -321,21 +321,41 @@ blogs.deleteBlogCategory = async (req, res) => {
 
 blogs.getAllBlogs = async (req, res) => {
     try {
+        let { search } = req.body;
+        let condition = {
+            status: true
+        }
+        if (search) {
+            condition = {
+                [Op.or]: {
+                    title: {
+                        [Op.like]: `%${search}%`
+                    },
+                    url: {
+                        [Op.like]: `%${search}%`
+                    },
+                    description: {
+                        [Op.like]: `%${search}%`
+                    },
+                    '$blog_category.name$': {
+                        [Op.like]: `%${search}%`
+                    }
+                }
+            }
+        }
         blog.findAll({
-            where:{
-                status:true
-            },
+            where: condition,
             include: [{
-                model:blog_category,
-                attributes:["id","name","name_en","description",
-                "description_en"],
-                where:{
-                    status:true
+                model: blog_category,
+                attributes: ["id", "name", "name_en", "description",
+                    "description_en"],
+                where: {
+                    status: true
                 }
             }]
         }).then(result => {
 
-            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -361,23 +381,23 @@ blogs.getAllBlogs = async (req, res) => {
 
 blogs.getBlogsByUser = async (req, res) => {
     try {
-        let {userId} = req.user;
+        let { userId } = req.user;
         blog.findAll({
-            where:{
-             userId :userId,
-             status:true
+            where: {
+                userId: userId,
+                status: true
             },
             include: [{
-                model:blog_category,
-                attributes:["id","name","name_en","description",
-                "description_en"],
-                where:{
-                    status:true
+                model: blog_category,
+                attributes: ["id", "name", "name_en", "description",
+                    "description_en"],
+                where: {
+                    status: true
                 }
             }]
         }).then(result => {
 
-            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -432,23 +452,23 @@ blogs.getBlogBySlug = async (req, res) => {
         blog.findOne({
             where: {
                 slug: slug,
-                status:true
+                status: true
             },
             include: [{
-                model:blog_category,
+                model: blog_category,
                 where: {
-                    status:true
+                    status: true
                 },
-                attributes:["id","name","name_en","description",
-                "description_en"]
-            },{
-                model:blog_comment,
-                attributes:["name","email","website",
-                "comment"]
+                attributes: ["id", "name", "name_en", "description",
+                    "description_en"]
+            }, {
+                model: blog_comment,
+                attributes: ["name", "email", "website",
+                    "comment"]
             }]
         }).then(result => {
 
-            let massage =  (result)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result) ? Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -484,13 +504,13 @@ blogs.getBlogsByCategoryname = async (req, res) => {
                         name_en: name
                     }
                 ],
-                status:true
+                status: true
             },
             include: [blog]
 
         }).then(result => {
 
-            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -519,17 +539,17 @@ blogs.getBlogsByCategoryId = async (req, res) => {
         blog_category.findAll({
             where: {
                 id: id,
-                status:true
+                status: true
             },
             include: [{
-                    model:blog,
-                    where:{
-                        status:true
-                    }
-                }]
+                model: blog,
+                where: {
+                    status: true
+                }
+            }]
 
         }).then(result => {
-            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
 
             return res.json({
                 code: Constant.SUCCESS_CODE,
@@ -556,12 +576,12 @@ blogs.getBlogsByCategoryId = async (req, res) => {
 blogs.getAllBlogsCategory = async (req, res) => {
     try {
         blog_category.findAll({
-            where:{
-                status:true
+            where: {
+                status: true
             }
         }).then(result => {
 
-            let massage =  (result.length>0)?Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.BLOG_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,

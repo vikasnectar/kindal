@@ -6,7 +6,7 @@ const db = require("../models");
 const Constant = require('../config/constant');
 const event = db.event;
 const admin = db.admin;
-const event_category= db.event_category;
+const event_category = db.event_category;
 const { Op } = require("sequelize");
 let events = {};
 
@@ -14,10 +14,10 @@ let events = {};
 
 events.add = async (req, res) => {
     try {
-        let { name, name_en, date, time, description, description_en ,category_id,image } = req.body;
+        let { name, name_en, date, time, description, description_en, category_id, image } = req.body;
         let { userId } = req.user;
         let fileName = '';
-        let slug = await utility.generateSlug(name,event);
+        let slug = await utility.generateSlug(name, event);
 
         let eventData = {
             name: name,
@@ -25,7 +25,7 @@ events.add = async (req, res) => {
             category_id: category_id,
             date: date,
             time: time,
-            slug:slug,
+            slug: slug,
             description: description,
             description_en: description_en,
             image: fileName,
@@ -37,23 +37,25 @@ events.add = async (req, res) => {
 
             if (image) {
                 fileName = await utility.uploadBase64Image(image)
-            
-             let userData = {
+
+                let userData = {
                     image: fileName
-    
+
                 }
                 result.update(userData)
             }
 
-            let data = await event.findAll({where:{
-                status:true
-            },
-            include: [{
-                model:event_category,
-                where:{
-                    status:true
+            let data = await event.findAll({
+                where: {
+                    status: true
                 },
-            }]})
+                include: [{
+                    model: event_category,
+                    where: {
+                        status: true
+                    },
+                }]
+            })
 
             return res.json({
                 code: Constant.SUCCESS_CODE,
@@ -79,7 +81,7 @@ events.add = async (req, res) => {
 
 events.edit = async (req, res) => {
     try {
-        let { id, name, name_en, date, time, description, description_en , category_id } = req.body;
+        let { id, name, name_en, date, time, description, description_en, category_id } = req.body;
         let { userId } = req.user;
         let fileName = '';
         if (req.files) {
@@ -97,7 +99,7 @@ events.edit = async (req, res) => {
             category_id: category_id,
 
         }
-        
+
         event.findOne({
             where: {
                 id: id
@@ -138,19 +140,35 @@ events.edit = async (req, res) => {
 
 events.getAllEvents = async (req, res) => {
     try {
+        let { search } = req.body;
+        let condition = {
+            status: true
+        }
+        if (search) {
+            condition = {
+                [Op.or]: {
+                    name: {
+                        [Op.like]: `%${search}%`
+                    },
+                    description: {
+                        [Op.like]: `%${search}%`
+                    },
+                    '$event_category.name$': {
+                        [Op.like]: `%${search}%`
+                    }
+                }
+            }
+        }
         event.findAll({
-            where:{
-                status:true
-            },
+            where: condition,
             include: [{
-                model:event_category,
-                where:{
-                    status:true
+                model: event_category,
+                where: {
+                    status: true
                 },
             }]
         }).then(result => {
-
-            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
 
             return res.json({
                 code: Constant.SUCCESS_CODE,
@@ -177,14 +195,14 @@ events.getAllEvents = async (req, res) => {
 events.getEventBySlug = async (req, res) => {
     try {
 
-        let {slug} =  req.body;
+        let { slug } = req.body;
         event.findOne({
             where: {
-                slug:slug,
-                status:true
+                slug: slug,
+                status: true
             }
         }).then(result => {
-            let massage =  (result)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result) ? Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -210,19 +228,19 @@ events.getEventBySlug = async (req, res) => {
 events.getEventsByUserId = async (req, res) => {
     try {
 
-        let {userId} = req.user;
+        let { userId } = req.user;
         admin.findAll({
             where: {
                 id: userId
             },
             include: [{
-                model:event,
-                where:{
-                    status:true
+                model: event,
+                where: {
+                    status: true
                 }
             }]
         }).then(result => {
-            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -307,17 +325,17 @@ events.getEventsByCategoryname = async (req, res) => {
                         name_en: name
                     }
                 ],
-                status:true
+                status: true
             },
             include: [{
-                model:event,
-                where:{
-                    status:true
+                model: event,
+                where: {
+                    status: true
                 }
             }]
 
         }).then(result => {
-            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -347,17 +365,17 @@ events.getEventsByCategoryId = async (req, res) => {
         event.findAll({
             where: {
                 category_id: id,
-                status:true
+                status: true
             },
             include: [{
-                model:event_category,
-                where:{
-                    status:true
+                model: event_category,
+                where: {
+                    status: true
                 }
             }]
 
         }).then(result => {
-            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
@@ -395,9 +413,11 @@ events.addEventCategory = async (req, res) => {
 
         let result = await event_category.create(eventData);
         if (result) {
-            let data = await event_category.findAll({ where:{
-                status:true
-                },})
+            let data = await event_category.findAll({
+                where: {
+                    status: true
+                },
+            })
 
             return res.json({
                 code: Constant.SUCCESS_CODE,
@@ -525,11 +545,11 @@ events.deleteEventCategory = async (req, res) => {
 events.getAllEventsCategory = async (req, res) => {
     try {
         event_category.findAll({
-            where:{
-                status:true
-                },
+            where: {
+                status: true
+            },
         }).then(result => {
-            let massage =  (result.length>0)?Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let massage = (result.length > 0) ? Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,

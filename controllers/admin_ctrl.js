@@ -18,7 +18,7 @@ let admin = {};
 admin.userRegistration = async function (req, res) {
 
   try {
-    let {image} =req.body;
+    let { image } = req.body;
     let profile_img = "";
     let userData = await validation.checkUserData(req.body)
     if (userData.message) {
@@ -48,13 +48,13 @@ admin.userRegistration = async function (req, res) {
 
         if (image) {
           profile_img = await utility.uploadBase64Image(image)
-      
-       let userData = {
-          profile_img: profile_img
+
+          let userData = {
+            profile_img: profile_img
 
           }
           result.update(userData)
-      }
+        }
 
         let mailOptions = {
           from: 'vikas <vikas.kushwah@nectarinfotel.com>',
@@ -87,44 +87,44 @@ admin.userRegistration = async function (req, res) {
 }
 
 
-admin.getUserByToken = async(req,res)=>{
-    try {
-      const SECRET = process.env.SECRET;
-      const { authorization } = req.headers;
-      const decoded = jwt.verify(authorization, SECRET);
-      let result="";
-      if(decoded){
-         result = await user.findOne({
-          where: {
-            id: decoded.userId
-          }
-        })
-
-        result = {
-          userId: result.id,
-          first_name: result.first_name,
-          last_name: result.last_name,
-          email: result.email,
-          gendar: result.gendar,
-          role:result.role,
-          city: result.city,
-          phone: result.phone,
-          dob_date: result.dob_date,
-          profile_img: result.profile_img
+admin.getUserByToken = async (req, res) => {
+  try {
+    const SECRET = process.env.SECRET;
+    const { authorization } = req.headers;
+    const decoded = jwt.verify(authorization, SECRET);
+    let result = "";
+    if (decoded) {
+      result = await user.findOne({
+        where: {
+          id: decoded.userId
         }
-      }
-      
-      return res.json({
-          code: Constant.SUCCESS_CODE,
-          massage: Constant.USER_VERIFICATION_SUCCESS,
-          data: result
-        })
-  } catch (error) {
-      return res.json({
-          code: Constant.INVALID_CODE,
-          massage: Constant.INVALID_TOKEN,
-          data: null
       })
+
+      result = {
+        userId: result.id,
+        first_name: result.first_name,
+        last_name: result.last_name,
+        email: result.email,
+        gendar: result.gendar,
+        role: result.role,
+        city: result.city,
+        phone: result.phone,
+        dob_date: result.dob_date,
+        profile_img: result.profile_img
+      }
+    }
+
+    return res.json({
+      code: Constant.SUCCESS_CODE,
+      massage: Constant.USER_VERIFICATION_SUCCESS,
+      data: result
+    })
+  } catch (error) {
+    return res.json({
+      code: Constant.INVALID_CODE,
+      massage: Constant.INVALID_TOKEN,
+      data: null
+    })
   }
 }
 admin.userLogin = async (req, res) => {
@@ -155,7 +155,7 @@ admin.userLogin = async (req, res) => {
           last_name: result.last_name,
           email: result.email,
           gendar: result.gendar,
-          role:result.role,
+          role: result.role,
           city: result.city,
           phone: result.phone,
           dob_date: result.dob_date,
@@ -329,11 +329,11 @@ admin.resetPassword = async (req, res) => {
 admin.changePassword = async (req, res) => {
   try {
     let { oldPassword, password } = req.body;
-    let {email} =  req.user;
+    let { email } = req.user;
 
     user.findOne({
       where: {
-        email:email
+        email: email
       }
     }).then((result) => {
       if (result && (bcrypt.compareSync(oldPassword, result.password))) {
@@ -370,34 +370,34 @@ admin.changePassword = async (req, res) => {
 
 admin.updateProfile = async (req, res) => {
   try {
-    let {userId} =  req.user;
-    let {image,gendar,last_name,phone,first_name,city,dob_date} = req.body; 
+    let { userId } = req.user;
+    let { image, gendar, last_name, phone, first_name, city, dob_date } = req.body;
     let profile_img = "";
     user.findOne({
       where: {
-        id:userId
+        id: userId
       }
     }).then(async (result) => {
       if (result) {
         let userData = {
-          gendar:gendar,
-          last_name:last_name,
-          phone:phone,
-          first_name:first_name,
-          city:city,
-          dob_date:dob_date
+          gendar: gendar,
+          last_name: last_name,
+          phone: phone,
+          first_name: first_name,
+          city: city,
+          dob_date: dob_date
         }
         result.update(userData);
-        
+
         if (image) {
           profile_img = await utility.uploadBase64Image(image)
-      
-       let userData = {
-          profile_img: profile_img
+
+          let userData = {
+            profile_img: profile_img
 
           }
           result.update(userData)
-      }
+        }
 
         return res.json({
           code: Constant.SUCCESS_CODE,
@@ -428,38 +428,38 @@ admin.addConsignee = async function (req, res) {
 
   try {
 
-          let {first_name,last_name,email} = req.body;
-          let userData = {
-              first_name:first_name,
-              last_name:last_name,
-              email:email,
-              role:3,
-              status:1
-          }
-      userData.password = utility.randomString(8);
-      let result = await user.findAll({
-        where: {
-          email: userData.email
-        }
-      })
-      if (result.length > 0) {
-
-        return res.json({
-          code: Constant.FORBIDDEN_CODE,
-          massage: Constant.EMAIL_ALREADY_REGISTERED,
-          data: null
-        })
-      } else {
-
-        userData.password = bcrypt.hashSync(userData.password, salt);
-        let result = await user.create(userData);
-        return res.json({
-          code: Constant.SUCCESS_CODE,
-          massage: Constant.USER_SAVE_SUCCESS,
-          data: {id:result.id}
-        })
-
+    let { first_name, last_name, email } = req.body;
+    let userData = {
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      role: 3,
+      status: 1
+    }
+    userData.password = utility.randomString(8);
+    let result = await user.findAll({
+      where: {
+        email: userData.email
       }
+    })
+    if (result.length > 0) {
+
+      return res.json({
+        code: Constant.FORBIDDEN_CODE,
+        massage: Constant.EMAIL_ALREADY_REGISTERED,
+        data: null
+      })
+    } else {
+
+      userData.password = bcrypt.hashSync(userData.password, salt);
+      let result = await user.create(userData);
+      return res.json({
+        code: Constant.SUCCESS_CODE,
+        massage: Constant.USER_SAVE_SUCCESS,
+        data: { id: result.id }
+      })
+
+    }
 
   }
   catch (err) {
@@ -478,19 +478,19 @@ admin.addConsignee = async function (req, res) {
 admin.getAllConsignee = async function (req, res) {
 
   try {
-        let result = await user.findAll({
-          where: {
-            role:3
-          },
-          attributes:["id","first_name","last_name"]
-        })
+    let result = await user.findAll({
+      where: {
+        role: 3
+      },
+      attributes: ["id", "first_name", "last_name"]
+    })
 
-        let massage =  (result.length>0)?Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
-            return res.json({
-                code: Constant.SUCCESS_CODE,
-                massage: massage,
-                data: result
-            })
+    let massage = (result.length > 0) ? Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+    return res.json({
+      code: Constant.SUCCESS_CODE,
+      massage: massage,
+      data: result
+    })
 
   }
   catch (err) {
@@ -506,23 +506,22 @@ admin.getAllConsignee = async function (req, res) {
 }
 
 
-
 admin.getAllAuthor = async function (req, res) {
 
   try {
-        let result = await user.findAll({
-          where: {
-            role: 4
-          },
-          attributes:["id","first_name","last_name","email","phone"]
-        })
+    let result = await user.findAll({
+      where: {
+        role: 4
+      },
+      attributes: ["id", "first_name", "last_name", "email", "phone"]
+    })
 
-        let massage =  (result.length>0)?Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
-            return res.json({
-                code: Constant.SUCCESS_CODE,
-                massage: massage,
-                data: result
-            })
+    let massage = (result.length > 0) ? Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+    return res.json({
+      code: Constant.SUCCESS_CODE,
+      massage: massage,
+      data: result
+    })
 
   }
   catch (err) {
@@ -538,23 +537,43 @@ admin.getAllAuthor = async function (req, res) {
 }
 
 admin.getAllUsers = async function (req, res) {
-
   try {
-        let result = await user.findAll({
-          where: {
-            role:{
-              [Op.in]:[3,5]
-            }
+    let { search } = req.body;
+    let condition = {
+      status: true,
+      role: {
+        [Op.in]: [3, 5]
+      }
+    };
+    if (search) {
+      condition = {
+        [Op.or]: {
+          first_name: {
+            [Op.like]: `%${search}%`
           },
-          attributes:["id","first_name","last_name","role"]
-        })
+          last_name: {
+            [Op.like]: `%${search}%`
+          },
+          email: {
+            [Op.like]: `%${search}%`
+          },
+          phone: {
+            [Op.like]: `%${search}%`
+          }
+        }
+      }
+    }
+    let result = await user.findAll({
+      where: condition,
+      attributes: ["id", "first_name", "last_name", "role", "email", "phone"]
+    })
 
-        let massage =  (result.length>0)?Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
-            return res.json({
-                code: Constant.SUCCESS_CODE,
-                massage: massage,
-                data: result
-            })
+    let massage = (result.length > 0) ? Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+    return res.json({
+      code: Constant.SUCCESS_CODE,
+      massage: massage,
+      data: result
+    })
 
   }
   catch (err) {
@@ -569,81 +588,81 @@ admin.getAllUsers = async function (req, res) {
 
 }
 
-admin.getUserById =  async (req,res)=>{
+admin.getUserById = async (req, res) => {
   try {
-    let {userId} = req.body;
+    let { userId } = req.body;
     let result = await user.findAll({
       where: {
-        id:userId
+        id: userId
       },
-      attributes:["id","first_name","last_name","role","email","phone","gendar"]
+      attributes: ["id", "first_name", "last_name", "role", "email", "phone", "gendar"]
     })
 
-    let massage =  (result.length>0)?Constant.USER_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
-        return res.json({
-            code: Constant.SUCCESS_CODE,
-            massage: massage,
-            data: result
-        })
+    let massage = (result.length > 0) ? Constant.USER_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+    return res.json({
+      code: Constant.SUCCESS_CODE,
+      massage: massage,
+      data: result
+    })
+
+  }
+  catch (err) {
+
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.SOMETHING_WENT_WRONG,
+      data: null
+    })
+
+  }
 
 }
-catch (err) {
 
-return res.json({
-  code: Constant.ERROR_CODE,
-  massage: Constant.SOMETHING_WENT_WRONG,
-  data: null
-})
-
-}
-
-}
-
-admin.deleteUser = async (req,res)=>{
+admin.deleteUser = async (req, res) => {
   try {
 
     let { id } = req.body;
 
     user.findOne({
-        where: {
-            id: id
-        }
+      where: {
+        id: id
+      }
     }).then(async (result) => {
-        if (result) {
-            let userData = {
-                status: 0
+      if (result) {
+        let userData = {
+          status: 0
 
-            }
-            result.update(userData)
-
-            return res.json({
-                code: Constant.SUCCESS_CODE,
-                massage: Constant.USER_DELETED_SUCCESS,
-                data: result
-            })
-
-        } else {
-            return res.json({
-                code: Constant.ERROR_CODE,
-                massage: Constant.SOMETHING_WENT_WRONG,
-                data: result
-            })
         }
+        result.update(userData)
+
+        return res.json({
+          code: Constant.SUCCESS_CODE,
+          massage: Constant.USER_DELETED_SUCCESS,
+          data: result
+        })
+
+      } else {
+        return res.json({
+          code: Constant.ERROR_CODE,
+          massage: Constant.SOMETHING_WENT_WRONG,
+          data: result
+        })
+      }
 
     }).catch(error => {
-        return res.json({
-            code: Constant.ERROR_CODE,
-            massage: Constant.SOMETHING_WENT_WRONG,
-            data: error
-        })
-    })
-
-} catch (error) {
-    return res.json({
+      return res.json({
         code: Constant.ERROR_CODE,
         massage: Constant.SOMETHING_WENT_WRONG,
         data: error
+      })
     })
-}
+
+  } catch (error) {
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.SOMETHING_WENT_WRONG,
+      data: error
+    })
+  }
 }
 module.exports = admin;
