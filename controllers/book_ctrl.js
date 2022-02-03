@@ -6,11 +6,12 @@ const db = require("../models");
 const utility = require('../helpers/utility');
 const book_category = db.book_category;
 const { Op, sequelize } = require("sequelize");
+const { required } = require('joi');
 const book = db.books;
 const book_tag = db.book_tag;
 const book_comment = db.book_comment;
 const tag_relationship = db.tag_relationship;
-
+const moment = require('moment');
 let books = {};
 
 books.addBookCategory = async (req, res) => {
@@ -217,7 +218,7 @@ books.getAllTags = async (req, res) => {
 books.add = async (req, res) => {
 
     try {
-        let { name, name_en, category_id, price, description, description_en, publication, author, item_condition, item_condition_en, size, price_type, edition_year, page_count, publush_rights, min_age, max_age, tag, cover_img } = req.body;
+        let { name, name_en, category_id, price, description, description_en, publication, author, item_condition, item_condition_en, size, price_type, edition_year, page_count, publush_rights, min_age, max_age, tag, cover_img ,storeId} = req.body;
         let { userId } = req.user;
         let slug = await utility.generateSlug(name, book);
 
@@ -239,6 +240,7 @@ books.add = async (req, res) => {
             publush_rights: publush_rights,
             min_age: min_age,
             slug: slug,
+            storeId,storeId,
             max_age: max_age
         }
         book.create(BookData).then(async result => {
@@ -284,7 +286,7 @@ books.add = async (req, res) => {
 books.edit = async (req, res) => {
     try {
 
-        let { id, name, name_en, category_id, price, description, description_en, publication, author, item_condition, item_condition_en, size, price_type, edition_year, page_count, publush_rights, min_age, max_age, tag, cover_img } = req.body;
+        let { id, name, name_en, category_id, price, description, description_en, publication, author, item_condition, item_condition_en, size, price_type, edition_year, page_count, publush_rights, min_age, max_age, tag, cover_img,storeId} = req.body;
         book.findOne({
             where: {
                 id: id
@@ -314,6 +316,7 @@ books.edit = async (req, res) => {
                     publush_rights: publush_rights,
                     min_age: min_age,
                     slug: slug,
+                    storeId,storeId,
                     max_age: max_age
                 }
 
@@ -553,7 +556,9 @@ books.getBooksBytag = async (req, res) => {
         let { slug } = req.body;
         let data = await book_tag.findOne({
             where: {
-                name: slug
+                name: {
+                    [Op.in]: slug
+                }
             },
             include: [{
                 model: book,
@@ -672,4 +677,156 @@ books.getBookBySlug = async (req, res) => {
     }
 
 }
+
+
+books.getBooksByUserId = async (req, res) => {
+    try {
+        let { userId } = req.user;
+        book.findAll({
+            where: {
+                userId: userId
+            }
+        }).then(async (result) => {
+
+            let massage = (result) ? Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: result
+            })
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
+books.getBookByStoreId = async (req, res) => {
+    try {
+        let { storeId } = req.body;
+        book.findOne({
+            where: {
+                storeId: storeId,
+                status: true
+            },
+            include: [{
+                model: book_category,
+                where: {
+                    status: true
+                },
+                attributes: ["id", "name", "name_en", "description",
+                    "description_en"]
+            }, {
+                model: book_tag,
+
+            }]
+        }).then(async (result) => {
+
+            let massage = (result) ? Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let data = null;
+            if (result) {
+                let book_comments = await book_comment.findAll({
+                    where: {
+                        book_id: result.id
+                    }
+                });
+                data = {
+                    result: result,
+                    book_comments: book_comments
+                }
+            }
+
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
+books.getLatestBooks = async (req, res) => {
+    try {
+        var date = new Date();
+        date.setDate(date.getDate() - 7);
+        book.findOne({
+            where: {
+                createdAt: {
+                 [Op.gte]: date,
+                },
+                status: true
+            },
+            include: [{
+                model: book_category,
+                where: {
+                    status: true
+                },
+                attributes: ["id", "name", "name_en", "description",
+                    "description_en"]
+            }, {
+                model: book_tag,
+
+            }]
+        }).then(async (result) => {
+
+            let massage = (result) ? Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+            let data = null;
+            if (result) {
+                let book_comments = await book_comment.findAll({
+                    where: {
+                        book_id: result.id
+                    }
+                });
+                data = {
+                    result: result,
+                    book_comments: book_comments
+                }
+            }
+
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: massage,
+                data: data
+            })
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
 module.exports = books;
