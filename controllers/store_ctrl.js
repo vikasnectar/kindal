@@ -362,5 +362,54 @@ stores.AprovedStore = async (req, res) => {
     }
 
 }
+stores.multideleteStore = async (req, res) => {
+    try {
 
+        let { id } = req.body;
+
+        store.findOne({
+            where: {
+                id:{
+                    [Op.or]:id
+                }
+            }
+        }).then(async (result) => {
+            if (result) {
+                let storeData = {
+                    status: 0
+
+                }
+                result.update(storeData)
+
+                return res.json({
+                    code: Constant.SUCCESS_CODE,
+                    massage: Constant.STORE_DELETED_SUCCESS,
+                    data: result
+                })
+
+            } else {
+                return res.json({
+                    code: Constant.ERROR_CODE,
+                    massage: Constant.SOMETHING_WENT_WRONG,
+                    data: result
+                })
+            }
+
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
 module.exports = stores;

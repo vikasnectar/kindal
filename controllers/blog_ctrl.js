@@ -640,5 +640,54 @@ blogs.addBlogComment = async (req, res) => {
 
 }
 
+blogs.multidelete = async (req, res) => {
+    try {
+
+        let { id } = req.body;
+
+        blog.findOne({
+            where: {
+                id:{
+                    [Op.or]:id
+                }            }
+        }).then(async (result) => {
+            if (result) {
+                let blogData = {
+                    status: 0
+
+                }
+                result.update(blogData)
+
+                return res.json({
+                    code: Constant.SUCCESS_CODE,
+                    massage: Constant.BLOG_DELETED_SUCCESS,
+                    data: result
+                })
+
+            } else {
+                return res.json({
+                    code: Constant.ERROR_CODE,
+                    massage: Constant.SOMETHING_WENT_WRONG,
+                    data: result
+                })
+            }
+
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
 
 module.exports = blogs;

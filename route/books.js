@@ -25,6 +25,8 @@ router.post('/getBooksByFilter', book.getBooksByFilter);
 router.post('/add', middileware.checkAuthentication, book.add);
 router.put('/edit', middileware.checkAuthentication, book.edit);
 router.delete('/delete', middileware.checkAuthentication, book.delete);
+router.delete('/multidelete', middileware.checkAuthentication, book.multidelete);
+
 router.post('/addBookComment', middileware.checkAuthentication,book.addBookComment);
 
 module.exports = router

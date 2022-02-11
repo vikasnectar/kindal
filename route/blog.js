@@ -12,6 +12,7 @@ router.get('/getBlogsByUser', middileware.checkAuthentication, blog.getBlogsByUs
 router.post('/add', middileware.checkAuthentication, blog.add);
 router.put('/edit', middileware.checkAuthentication,middileware.checkBlogDeleteAuthentication, blog.edit);
 router.delete('/delete', middileware.checkAuthentication, middileware.checkBlogDeleteAuthentication, blog.delete);
+router.delete('/multidelete ', middileware.checkAuthentication, blog.multidelete );
 
 
 router.post('/getBlogsByCategoryname', blog.getBlogsByCategoryname);

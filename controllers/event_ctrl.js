@@ -572,4 +572,55 @@ events.getAllEventsCategory = async (req, res) => {
 
 }
 
+events.multidelete = async (req, res) => {
+    try {
+
+        let { id } = req.body;
+
+        event.findOne({
+            where: {
+                id:{
+                    [Op.or]:id
+                }
+            }
+        }).then(async (result) => {
+            if (result) {
+                let evetData = {
+                    status: 0
+
+                }
+                result.update(evetData)
+
+                return res.json({
+                    code: Constant.SUCCESS_CODE,
+                    massage: Constant.Event_DELETED_SUCCESS,
+                    data: result
+                })
+
+            } else {
+                return res.json({
+                    code: Constant.ERROR_CODE,
+                    massage: Constant.SOMETHING_WENT_WRONG,
+                    data: result
+                })
+            }
+
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
+
 module.exports = events;

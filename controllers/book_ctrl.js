@@ -444,7 +444,7 @@ books.getBooks = async (req, res) => {
 
 books.getBooksByFilter = async (req, res) => {
     try {
-        let { max_price, min_price, author, category_id, search } = req.body;
+        let { max_price, min_price, author, category_id, search, storeId } = req.body;
         let condition = {};
         let models = [{
             model: book_category
@@ -489,6 +489,10 @@ books.getBooksByFilter = async (req, res) => {
 
         if (category_id) {
             condition.category_id = category_id
+        }
+	
+	if (storeId) {
+            condition.storeId = storeId
         }
 
         let data = await book.findAll({
@@ -684,7 +688,10 @@ books.getBooksByUserId = async (req, res) => {
         let { userId } = req.user;
         book.findAll({
             where: {
-                userId: userId
+               [Op.or]: {
+                userId: userId,
+                author: userId
+               }
             }
         }).then(async (result) => {
 
@@ -715,7 +722,7 @@ books.getBooksByUserId = async (req, res) => {
 books.getBookByStoreId = async (req, res) => {
     try {
         let { storeId } = req.body;
-        book.findOne({
+        book.findAll({
             where: {
                 storeId: storeId,
                 status: true
@@ -734,23 +741,10 @@ books.getBookByStoreId = async (req, res) => {
         }).then(async (result) => {
 
             let massage = (result) ? Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
-            let data = null;
-            if (result) {
-                let book_comments = await book_comment.findAll({
-                    where: {
-                        book_id: result.id
-                    }
-                });
-                data = {
-                    result: result,
-                    book_comments: book_comments
-                }
-            }
-
             return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
-                data: data
+                data: result
             })
         }).catch(error => {
             return res.json({
@@ -773,44 +767,20 @@ books.getLatestBooks = async (req, res) => {
     try {
         var date = new Date();
         date.setDate(date.getDate() - 7);
-        book.findOne({
+        book.findAll({
             where: {
                 createdAt: {
                  [Op.gte]: date,
                 },
                 status: true
-            },
-            include: [{
-                model: book_category,
-                where: {
-                    status: true
-                },
-                attributes: ["id", "name", "name_en", "description",
-                    "description_en"]
-            }, {
-                model: book_tag,
-
-            }]
+            }
         }).then(async (result) => {
 
             let massage = (result) ? Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
-            let data = null;
-            if (result) {
-                let book_comments = await book_comment.findAll({
-                    where: {
-                        book_id: result.id
-                    }
-                });
-                data = {
-                    result: result,
-                    book_comments: book_comments
-                }
-            }
-
-            return res.json({
+           return res.json({
                 code: Constant.SUCCESS_CODE,
                 massage: massage,
-                data: data
+                data: result
             })
         }).catch(error => {
             return res.json({
@@ -829,4 +799,54 @@ books.getLatestBooks = async (req, res) => {
 
 }
 
+books.multidelete = async (req, res) => {
+    try {
+
+        let { id } = req.body;
+        book.findOne({
+            where: {
+                id:{
+                    [Op.or]:id
+                },
+		status: 1
+            }
+        }).then(async (result) => {
+            if (result) {
+                let bookData = {
+                    status: 0
+
+                }
+                result.update(bookData)
+
+                return res.json({
+                    code: Constant.SUCCESS_CODE,
+                    massage: Constant.BOOK_CATEGORY_DELETED_SUCCESS,
+                    data: result
+                })
+
+            } else {
+                return res.json({
+                    code: Constant.ERROR_CODE,
+                    massage: Constant.SOMETHING_WENT_WRONG,
+                    data: result
+                })
+            }
+
+        }).catch(error => {
+            return res.json({
+                code: Constant.ERROR_CODE,
+                massage: Constant.SOMETHING_WENT_WRONG,
+                data: error
+            })
+        })
+
+    } catch (error) {
+        return res.json({
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: error
+        })
+    }
+
+}
 module.exports = books;
