@@ -161,6 +161,15 @@ admin.userLogin = async (req, res) => {
           dob_date: result.dob_date,
           profile_img: result.profile_img
         }
+        if(result.role==3){
+          let storeData = await store.findOne({
+            where: {
+              userId: result.id
+            }
+          })
+          params.storeId = storeData.id;
+        }
+
         params.jwtToken = jwt.sign(params, process.env.SECRET);
         return res.json({
           code: Constant.SUCCESS_CODE,
