@@ -9,6 +9,7 @@ const { Op, sequelize } = require("sequelize");
 const { required } = require('joi');
 const book = db.books;
 const order = db.order;
+const orderproduct = db.orderproduct;
 const orderdetails = db.orderdetails;
 const moment = require('moment');
 let orders = {};
@@ -17,10 +18,17 @@ orders.createOrder = async (req,res)=>{
 
    try {
     let payload = req.body;
+    let {orderDetails} = req.body;
+    
     let result = await order.create(payload);
     if(result){
         payload.orderId = result.id;
         let resultdata = await orderdetails.create(payload);
+        orderDetails.forEach(object => {
+            object.orderId = result.id;
+            object.storeId = payload.storeId?payload.storeId : null;
+          });
+          let orderproductdata = await orderproduct.bulkCreate(orderDetails);
         return res.json({
             code: Constant.SUCCESS_CODE,
             massage: Constant.ORDER_SAVE_SUCCESS,
@@ -32,7 +40,7 @@ orders.createOrder = async (req,res)=>{
         return res.json({
             code: Constant.ERROR_CODE,
             massage: Constant.SOMETHING_WENT_WRONG,
-            data: result
+            data: null
         })
    }
 }

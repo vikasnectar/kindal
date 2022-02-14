@@ -30,6 +30,8 @@ db.event_category = require("./event_category.model.js")(sequelize, Sequelize);
 
 db.order = require("./order.model.js")(sequelize, Sequelize);
 db.orderdetails = require("./orderdetails.model.js")(sequelize, Sequelize);
+db.orderproduct = require("./orderproducts.model.js")(sequelize, Sequelize);
+
 
 db.books =  require('./books.model.js')(sequelize,Sequelize)
 db.book_category = require("./book_category.model.js")(sequelize, Sequelize);
