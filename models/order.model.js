@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
       bookId: {
         type: Sequelize.INTEGER(11)
       },
+      storeId: {
+        type: Sequelize.INTEGER(11)
+      },
       shipping: {
         type: Sequelize.TEXT
       },
