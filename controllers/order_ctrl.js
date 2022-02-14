@@ -219,4 +219,53 @@ orders.getOrderByStoreId = async (req,res)=>{
       })
     }
 }
+
+orders.getOrderDetailsById = async (req,res) =>{
+ try {
+    let {Id} = req.params;
+
+    let orderresult =  await order.findOne({
+        where:{
+            id:Id
+        }
+    });
+    if(orderresult){
+        let result = await orderproduct.findAll({
+            where:{
+                orderId:Id
+            }
+        });
+        let orderdetailsresult = await orderdetails.findOne({
+            where:{
+                orderId:Id
+            }
+        });
+        let data = {
+            order : orderresult,
+            orderDetails:result,
+            billingdetails:orderdetailsresult
+        }
+        return res.json({
+            code: Constant.SUCCESS_CODE,
+            massage: Constant.ORDER_RETRIEVE_SUCCESS,
+            data: data
+            });
+    }else{
+        return res.json({
+            code: Constant.SUCCESS_CODE,
+            massage: Constant.ORDER_RETRIEVE_SUCCESS,
+            data: order
+            });
+    }
+ 
+ } catch (error) {
+    return res.json({
+        code: Constant.ERROR_CODE,
+        massage: Constant.SOMETHING_WENT_WRONG,
+        data: null
+    })
+ }
+
+}
+
 module.exports = orders;

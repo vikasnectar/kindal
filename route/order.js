@@ -8,6 +8,7 @@ router.put('/updateorder',order.updateOrder)
 router.get('/getallorders',middileware.checkAuthentication,order.getAllOrders)
 router.get('/getOrderByUserId',middileware.checkAuthentication,order.getOrderByUserId)
 router.get('/getOrderByStoreId',middileware.checkAuthentication,order.getOrderByStoreId)
+router.get('/getOrderDetailsById/:Id',middileware.checkAuthentication,order.getOrderDetailsById)
 router.get('/getOrderByAuthorId',middileware.checkAuthentication,order.getOrderByAuthorId)
 
 
