@@ -7,6 +7,7 @@ router.post('/createorder',order.createOrder)
 router.put('/updateorder',order.updateOrder)
 router.get('/getallorders',middileware.checkAuthentication,order.getAllOrders)
 router.get('/getOrderByUserId',middileware.checkAuthentication,order.getOrderByUserId)
+router.get('/getOrderByStoreId',middileware.checkAuthentication,order.getOrderByStoreId)
 router.get('/getOrderByAuthorId',middileware.checkAuthentication,order.getOrderByAuthorId)
 
 

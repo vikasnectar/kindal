@@ -174,14 +174,13 @@ orders.updateOrder = async (req,res)=>{
 }
 
 
- orders.getOrderByAuthorId = async (req,res)=>{
+orders.getOrderByStoreId = async (req,res)=>{
     try {
-        let { userId } = req.user;
-        let {fromdate,todate } = req.body;
+        let {fromdate,todate,storeId } = req.body;
         let condition = {};
         if(fromdate){
             condition = {
-                author: userId,
+                storeId: storeId,
                 createdAt: {
                     [Op.and]: {
                         [Op.gte]: fromdate,
@@ -192,7 +191,7 @@ orders.updateOrder = async (req,res)=>{
             }
         }else{
             condition = {
-                author: userId
+                storeId: storeId
             }
         }
         order.findAll({
@@ -212,5 +211,4 @@ orders.updateOrder = async (req,res)=>{
       })
     }
 }
-
 module.exports = orders;
