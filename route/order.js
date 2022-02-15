@@ -5,11 +5,11 @@ const order = require('../controllers/order_ctrl')
 
 router.post('/createorder',order.createOrder)
 router.put('/updateorder',order.updateOrder)
-router.get('/getallorders',middileware.checkAuthentication,order.getAllOrders)
+router.post('/getallorders',middileware.checkAuthentication,order.getAllOrders)
 router.get('/getOrderByUserId',middileware.checkAuthentication,order.getOrderByUserId)
-router.get('/getOrderByStoreId',middileware.checkAuthentication,order.getOrderByStoreId)
+router.post('/getOrderByStoreId',middileware.checkAuthentication,order.getOrderByStoreId)
 router.get('/getOrderDetailsById/:Id',middileware.checkAuthentication,order.getOrderDetailsById)
-router.get('/getOrderByAuthorId',middileware.checkAuthentication,order.getOrderByAuthorId)
+router.post('/getOrderByAuthorId',middileware.checkAuthentication,order.getOrderByAuthorId)
 
 
 module.exports =  router;
