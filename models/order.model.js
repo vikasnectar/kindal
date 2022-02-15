@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER(11)
       },
       storeId: {
-        type: Sequelize.INTEGER(11)
+        type: Sequelize.TEXT
       },
       shipping: {
         type: Sequelize.TEXT

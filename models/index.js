@@ -44,6 +44,24 @@ db.book_comment = require("./book_comment.model.js")(sequelize, Sequelize);
 
 
 
+db.order.hasMany(db.orderdetails, {
+  foreignKey: "orderId"
+})
+
+db.orderdetails.belongsTo(db.order, {
+  foreignKey: "orderId"
+})
+
+
+db.store.hasMany(db.order, {
+  foreignKey: "storeId"
+})
+
+db.order.belongsTo(db.store, {
+  foreignKey: "storeId"
+})
+
+
 
 db.store.hasMany(db.books, {
   foreignKey: "storeId"

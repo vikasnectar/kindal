@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
         billing_firstname: {
         type: Sequelize.TEXT
       },
+      billing_email: {
+        type: Sequelize.TEXT
+      },
       billing_lastname: {
         type: Sequelize.TEXT
       },
@@ -43,6 +46,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.TEXT
       },
       shipping_address: {
+        type: Sequelize.TEXT
+      },
+      shipping_email: {
         type: Sequelize.TEXT
       },
       shipping_address_optional: {

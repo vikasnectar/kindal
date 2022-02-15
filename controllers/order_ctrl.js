@@ -30,10 +30,28 @@ orders.createOrder = async (req,res)=>{
             object.storeId = payload.storeId?payload.storeId : null;
           });
           let orderproductdata = await orderproduct.bulkCreate(orderDetails);
+
+          order.findOne({
+              where : {
+                id: result.id
+              },
+            include: [{
+                model: store
+            },{
+                model: orderdetails
+            }]
+          }).then((orderDetails)=>{
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                massage: Constant.ORDER_SAVE_SUCCESS,
+                data: orderDetails
+            })
+          })
+    }else{
         return res.json({
-            code: Constant.SUCCESS_CODE,
-            massage: Constant.ORDER_SAVE_SUCCESS,
-            data: result
+            code: Constant.ERROR_CODE,
+            massage: Constant.SOMETHING_WENT_WRONG,
+            data: null
         })
     }
 
@@ -86,7 +104,13 @@ orders.updateOrder = async (req,res)=>{
 
  orders.getAllOrders = async (req,res)=>{
   try {
-      order.findAll().then((result)=>{
+      order.findAll({
+        include: [{
+            model: store
+        },{
+            model: orderdetails
+        }]
+      }).then((result)=>{
         return res.json({
             code: Constant.SUCCESS_CODE,
             massage: Constant.ORDER_RETRIEVE_SUCCESS,

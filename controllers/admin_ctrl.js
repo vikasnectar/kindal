@@ -548,12 +548,7 @@ admin.getAllAuthor = async function (req, res) {
 admin.getAllUsers = async function (req, res) {
   try {
     let { search } = req.body;
-    let condition = {
-      status: true,
-      role: {
-        [Op.in]: [3, 5]
-      }
-    };
+    let condition = {};
     if (search) {
       condition = {
         [Op.or]: {
