@@ -104,7 +104,27 @@ orders.updateOrder = async (req,res)=>{
 
  orders.getAllOrders = async (req,res)=>{
   try {
+      let {fromdate,todate,storeId} = req.body;
+      let condition = {};
+        if(fromdate){
+            condition = {
+                createdAt: {
+                    [Op.and]: {
+                        [Op.gte]: fromdate,
+                        [Op.lte]: todate
+                    }
+                }
+
+            }
+        }else{
+            condition = {}
+        }
+       
+        if(storeId){
+            condition.storeId = storeId;
+        }
       order.findAll({
+          where:condition,
         include: [{
             model: store
         },{
