@@ -241,7 +241,7 @@ orders.getOrderDetailsById = async (req,res) =>{
                 orderId:Id
             }
         });
-        let storedetailsresult = [];
+        let storedetailsresult = {};
          if(orderresult.storeId){
              storedetailsresult = await store.findOne({
                 where:{
