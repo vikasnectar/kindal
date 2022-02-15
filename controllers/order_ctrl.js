@@ -9,6 +9,7 @@ const { Op, sequelize } = require("sequelize");
 const { required } = require('joi');
 const book = db.books;
 const order = db.order;
+const store = db.store;
 const orderproduct = db.orderproduct;
 const orderdetails = db.orderdetails;
 const moment = require('moment');
@@ -240,10 +241,20 @@ orders.getOrderDetailsById = async (req,res) =>{
                 orderId:Id
             }
         });
+        let storedetailsresult = "";
+         if(orderresult.storeId){
+             storedetailsresult = await store.findOne({
+                where:{
+                    id:orderresult.storeId
+                }
+            });
+         }
+       
         let data = {
             order : orderresult,
             orderDetails:result,
-            billingdetails:orderdetailsresult
+            billingdetails:orderdetailsresult,
+            store : storedetailsresult
         }
         return res.json({
             code: Constant.SUCCESS_CODE,
