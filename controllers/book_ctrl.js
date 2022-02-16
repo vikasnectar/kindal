@@ -592,12 +592,15 @@ books.getBooksBytag = async (req, res) => {
 books.addBookComment = async (req, res) => {
     try {
 
-        let { name, email, comment, book_id } = req.body;
+        let { name, email, comment, book_id, rating  } = req.body;
+        let {userId} = req.user;
         let bookCommentData = {
             name: name,
             email: email,
             comment: comment,
-            book_id: book_id
+            book_id: book_id,
+            userId:userId,
+            rating:rating
         }
 
         let result = await book_comment.create(bookCommentData);

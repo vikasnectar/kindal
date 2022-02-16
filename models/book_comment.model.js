@@ -12,6 +12,12 @@ module.exports = (sequelize, Sequelize) => {
       book_id: {
         type: Sequelize.INTEGER(11)
       },
+      userId: {
+        type: Sequelize.INTEGER(11)
+      },
+      rating: {
+        type: Sequelize.INTEGER(11)
+      },
       status: {
         type: Sequelize.BOOLEAN,
         allowNull: false, 
