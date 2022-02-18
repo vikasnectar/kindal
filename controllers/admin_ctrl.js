@@ -167,7 +167,8 @@ admin.userLogin = async (req, res) => {
               userId: result.id
             }
           })
-          params.storeId = storeData.id;
+          
+          params.storeId = storeData?storeData.id:"";
         }
 
         params.jwtToken = jwt.sign(params, process.env.SECRET);
