@@ -30,6 +30,9 @@ module.exports = (sequelize, Sequelize) => {
     description_en: {
       type: Sequelize.TEXT
     },
+    address: {
+      type: Sequelize.TEXT
+    },
     approved: {
       type: Sequelize.BOOLEAN,
       allowNull: false, 

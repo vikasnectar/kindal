@@ -9,7 +9,7 @@ router.put('/editBookCategory', middileware.checkAuthentication, book.editBookCa
 router.delete('/deleteBookCategory', middileware.checkAuthentication, book.deleteBookCategory);
 router.get('/getAllCategory', book.getAllCategory);
 router.get('/getAllTags', book.getAllTags);
-router.post('/getBookBySlug',middileware.checkAuthentication, book.getBookBySlug);
+router.post('/getBookBySlug',book.getBookBySlug);
 
 router.get('/getBooksByUserId',middileware.checkAuthentication, book.getBooksByUserId);
 router.get('/getLatestBooks', book.getLatestBooks);

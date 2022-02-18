@@ -166,6 +166,8 @@ events.getAllEvents = async (req, res) => {
                 where: {
                     status: true
                 },
+            },{
+                model: admin
             }]
         }).then(result => {
             let massage = (result.length > 0) ? Constant.EVENT_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND

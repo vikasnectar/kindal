@@ -12,6 +12,7 @@ const book_tag = db.book_tag;
 const book_comment = db.book_comment;
 const tag_relationship = db.tag_relationship;
 const moment = require('moment');
+const { store } = require('../models');
 let books = {};
 
 books.addBookCategory = async (req, res) => {
@@ -423,7 +424,13 @@ books.getBooks = async (req, res) => {
             },
             include: [{
                 model: book_category
-            }]
+            },
+            {
+                model: book_comment,
+                attributes:['book_id','rating','userId']
+            }
+         ],
+           
         })
         let massage = (data.length > 0) ? Constant.BOOK_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
         return res.json({
@@ -646,6 +653,11 @@ books.getBookBySlug = async (req, res) => {
             }, {
                 model: book_tag,
 
+            },{
+                model: store,
+
+            },{
+                model: book_comment
             }]
         }).then(async (result) => {
 
