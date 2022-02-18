@@ -12,6 +12,7 @@ router.post('/getUserByToken', admin.getUserByToken);
 router.get('/getAllAuthor', admin.getAllAuthor);
 router.get('/emailVerification/:token', admin.emailVerification);
 router.post('/getUserById', admin.getUserById);
+router.get('/getUserCount', admin.getUserCount);
 
 
 

@@ -670,4 +670,39 @@ admin.deleteUser = async (req, res) => {
     })
   }
 }
+admin.getUserCount = async (req,res) => {
+ try {
+   db.admin.findAll({
+     where :{
+      role:{
+        [Op.in]:["3","4","5"]
+      }
+     }
+   }).then((result)=>{
+    let massage = (result.length > 0) ? Constant.CONSIGNEE_RETRIEVE_SUCCESS : Constant.NO_DATA_FOUND
+    
+    const consignee  = result.filter(user => user.role==3);
+    const client  = result.filter(user => user.role==5);
+    const auther  = result.filter(user => user.role==4);
+    let data = {
+      consignee: consignee.length,
+      client: client.length,
+      auther: auther.length
+    }
+    return res.json({
+      code: Constant.SUCCESS_CODE,
+      massage: massage,
+      data: data
+    })
+   }).catch(error => {
+    return res.json({
+      code: Constant.ERROR_CODE,
+      massage: Constant.SOMETHING_WENT_WRONG,
+      data: error
+    })
+  })
+ } catch (error) {
+   
+ }
+}
 module.exports = admin;
